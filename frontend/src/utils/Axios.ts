@@ -1,5 +1,5 @@
 import axios from "axios";
-import { baseURL } from "../common/SummaryApi";
+import { baseURL } from "../api/SummaryApi";
 
 
 
@@ -16,3 +16,5 @@ Axios.interceptors.request.use((config) => {
   }
   return config;
 });
+
+export default Axios;

@@ -4,7 +4,15 @@ const SummaryApi = {
     register:{
         url:"/auth/register",
         method:"post",
-    }
+    },
+    login:{
+        url:"/auth/login",
+        method:"post",
+    },
+    googleLogin:{
+        url:"/auth/google-login",
+        method:"post",
+    },
 }
 
 export default SummaryApi;
