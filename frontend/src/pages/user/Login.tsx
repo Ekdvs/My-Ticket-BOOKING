@@ -149,7 +149,7 @@ const Login = () => {
     return (
         <div className="w-full h-screen bg-[url('/bglogin.png')] bg-cover flex items-center justify-center">
             {/*Left SSection */}
-            <div className="hidden lg:flex w-[50%] h-full flex-col items-center justify-center gap-8 bg-blue-800/50 p-10">
+            <div className="hidden lg:flex w-[50%] h-full flex-col items-center justify-center gap-8 bg-purple-600/50 p-10">
 
                 {/* Logo */}
                 <img
@@ -188,8 +188,8 @@ const Login = () => {
 
             </div>
             {/*Left SSection */}
-            <div className="w-full lg:w-[50%] h-full bg-blue-800/50 flex items-center justify-center">
-                <div className="w-[90%] max-w-[550px] bg-black/50 backdrop-blur-md rounded-2xl shadow-2xl flex flex-col items-center justify-center gap-8 p-8">
+            <div className="w-full lg:w-[50%] h-full bg-purple-600/50 flex items-center justify-center">
+                <div className="w-[90%] max-w-[550px] bg-black/30 backdrop-blur-md rounded-2xl shadow-2xl flex flex-col items-center justify-center gap-8 p-8">
                     <h1 className="text-3xl font-semibold text-[#FFD700] text-center">Welcome Back</h1>
                     <form onSubmit={handleSubmit} className="w-full flex flex-col items-center gap-6">
                         <input type="email" name="email" placeholder="Email Address" value={formData.email} onChange={handleChange} className="w-[80%] h-[50px] rounded-lg p-3 bg-gray-800 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#FFD700]" />
