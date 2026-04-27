@@ -6,6 +6,10 @@ import Register from "../pages/user/Register";
 import ForgotPassword from "../pages/user/ForgotPassword";
 import VerifyForgotOTP from "../pages/user/VerifyForgotOTP";
 import ResetPassword from "../pages/user/ResetPassword";
+import UserDashboard from "../pages/user/UserDashboard";
+import AdminDashboard from "../pages/admin/AdminDashbord";
+import OrganizerDashboard from "../pages/organizer/OrganizerDashboard";
+
 
 const router = createBrowserRouter(
     [
@@ -15,9 +19,12 @@ const router = createBrowserRouter(
             children:[
                 {path:"/login", element:<Login/>},
                 {path:"/register", element:<Register/>},
-                {path:"/forgot", element:<ForgotPassword/>},
+                {path:"/forgot-password", element:<ForgotPassword/>},
                 {path:"/verify-forgot-otp", element:<VerifyForgotOTP/>},
-                {path:"/reset-password", element:<ResetPassword/>}
+                {path:"/reset-password", element:<ResetPassword/>},
+                {path:"/dashboard", element:<UserDashboard/>},
+                {path:"/admin", element:<AdminDashboard/>},
+                {path:"/organizer", element:<OrganizerDashboard/>},
             
             ]
         }

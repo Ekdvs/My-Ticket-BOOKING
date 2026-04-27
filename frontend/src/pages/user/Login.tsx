@@ -73,6 +73,9 @@ const Login = () => {
                 // ✅ Role-based navigation
                 if (role === "ADMIN") {
                     navigate("/admin");
+                }
+                else if (role === "ORGANIZER") {
+                    navigate("/organizer");   // ✅ ADD THIS
                 } else {
                     redirectAfterLogin();
                 }
@@ -85,65 +88,72 @@ const Login = () => {
             }
 
         } catch (error: any) {
-            
+
             const message =
                 error?.response?.data?.message ||
                 "Failed to login";
 
-            toast.error(message); 
+            toast.error(message);
             setLoading(false);
         }
 
     }
 
     const googleLogin = useGoogleLogin({
-    flow: "implicit",
+        flow: "implicit",
 
-    onSuccess: async (response) => {
-        try {
-            const backendResponse = await Axios({
-                method: SummaryApi.googleLogin.method,
-                url: SummaryApi.googleLogin.url,
-                data: {
-                    access_token: response.access_token,
-                },
-                withCredentials: true,
-            });
+        onSuccess: async (response) => {
+            try {
+                const backendResponse = await Axios({
+                    method: SummaryApi.googleLogin.method,
+                    url: SummaryApi.googleLogin.url,
+                    data: {
+                        access_token: response.access_token,
+                    },
+                    withCredentials: true,
+                });
 
-            if (backendResponse.data.success) {
-                localStorage.setItem(
-                    "accessToken",
-                    backendResponse.data.data.accessToken
-                );
-                localStorage.setItem(
-                    "refreshToken",
-                    backendResponse.data.data.refreshToken
-                );
+                if (backendResponse.data.success) {
+                    localStorage.setItem(
+                        "accessToken",
+                        backendResponse.data.data.accessToken
+                    );
+                    localStorage.setItem(
+                        "refreshToken",
+                        backendResponse.data.data.refreshToken
+                    );
 
-                // ✅ set default header
-                Axios.defaults.headers.common[
-                    "Authorization"
-                ] = `Bearer ${backendResponse.data.data.accessToken}`;
+                    // ✅ set default header
+                    Axios.defaults.headers.common[
+                        "Authorization"
+                    ] = `Bearer ${backendResponse.data.data.accessToken}`;
 
-                toast.success(backendResponse.data.message);
+                    toast.success(backendResponse.data.message);
 
-                redirectAfterLogin();
-            } else {
-                toast.error(backendResponse.data.message);
+                    console.log("User data from backend:", backendResponse.data.data);
+
+                    if (backendResponse.data.data.role === "ADMIN") {
+                        navigate("/admin");
+                        return;
+                    }
+
+                    redirectAfterLogin();
+                } else {
+                    toast.error(backendResponse.data.message);
+                }
+            } catch (error: any) {
+                const msg =
+                    error?.response?.data?.message ||
+                    "Google login failed";
+
+                toast.error(msg);
             }
-        } catch (error: any) {
-            const msg =
-                error?.response?.data?.message ||
-                "Google login failed";
+        },
 
-            toast.error(msg);
-        }
-    },
-
-    onError: () => {
-        toast.error("Google login failed");
-    },
-});
+        onError: () => {
+            toast.error("Google login failed");
+        },
+    });
 
 
     return (
@@ -199,15 +209,15 @@ const Login = () => {
                         </div>
                         <div className="w-[80%] flex justify-between text-sm text-gray-300">
                             <label className="flex items-center gap-2"><input type="checkbox" className="accent-[#FFD700]" /> Remember Me</label>
-                            <Link to="/forgot" className="text-[#FFD700] hover:underline">Forgot Password?</Link>
+                            <Link to="/forgot-password" className="text-[#FFD700] hover:underline">Forgot Password?</Link>
                         </div>
-                        <button type="submit" disabled={loading} className="flex items-center justify-center gap-3 w-[80%] py-3 rounded-lg bg-gradient-to-r from-[#D4AF37] to-[#FFD700] text-black font-semibold shadow-md"><LogIn size={20} /> {loading ? "Logging in..." : "Login"}</button>
+                        <button type="submit" disabled={loading} className="flex items-center justify-center gap-3 w-[80%] py-3 rounded-lg bg-gradient-to-r from-[#D4AF37] to-[#FFD700] text-black font-semibold shadow-md {loading}=disable" ><LogIn size={20} /> {loading ? "Logging in..." : "Login"}</button>
                         <div className="flex items-center w-[80%] gap-2 mt-4">
                             <div className="flex-1 h-[2px] bg-gray-600"></div>
                             <p className="text-gray-400 text-sm">or</p>
                             <div className="flex-1 h-[2px] bg-gray-600"></div>
                         </div>
-                        <button type="button" onClick={() => googleLogin()} className="flex items-center justify-center gap-3 w-[80%] py-3 bg-white text-gray-800 font-semibold rounded-lg shadow-md hover:bg-gray-100"><FcGoogle size={22} /> Continue with Google</button>
+                        <button type="button" disabled={loading} onClick={() => googleLogin()} className="flex items-center justify-center gap-3 w-[80%] py-3 bg-white text-gray-800 font-semibold rounded-lg shadow-md hover:bg-gray-100"><FcGoogle size={22} /> Continue with Google</button>
 
 
                     </form>

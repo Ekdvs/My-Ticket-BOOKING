@@ -110,7 +110,7 @@ const ForgotPassword: React.FC = () => {
             {/* Button */}
             <button
               type="submit"
-              
+              disabled={loading}
               className="flex items-center justify-center gap-3 w-[80%] py-3 rounded-lg bg-gradient-to-r from-[#D4AF37] to-[#FFD700] text-black font-semibold shadow-md"
             >
               {loading ? (

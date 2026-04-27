@@ -179,7 +179,7 @@ const Register: React.FC = () => {
             </div>
             {/* Left Section */}
             <div className="w-full lg:w-[50%] h-full bg-purple-600/50 flex items-center justify-center">
-                <div className="w-[95%] max-w-[450px] backdrop-blur-md rounded-2xl shadow-2xl flex flex-col items-center gap-8 p-8">
+                <div className="w-[95%] max-w-[550px] backdrop-blur-md rounded-2xl shadow-2xl flex flex-col items-center gap-8 p-8">
                     <h1 className="text-3xl font-semibold text-[#FFD700]">Create Your Account</h1>
                     <form onSubmit={handleSubmit} className="w-full flex flex-col items-center gap-2">
                         {/* Name */}

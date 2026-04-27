@@ -3,8 +3,8 @@ import toast from "react-hot-toast";
 import { useLocation, useNavigate } from "react-router-dom";
 import Axios from "../../utils/Axios";
 import SummaryApi from "../../api/SummaryApi";
-import { AiFillEye, AiFillEyeInvisible } from "react-icons/ai";
 import { FaEnvelope, FaLock } from "react-icons/fa";
+import { Eye, EyeOff } from "lucide-react";
 
 const ResetPassword = () => {
   const navigate = useNavigate();
@@ -27,7 +27,7 @@ const ResetPassword = () => {
     }
   }, [emailFromPrev, navigate]);
 
-  const validatePassword = (pwd:String):string|null => {
+  const validatePassword = (pwd: String): string | null => {
     if (pwd.length < 6) return "At least 8 characters required";
     if (!/[A-Z]/.test(pwd)) return "One uppercase letter required";
     if (!/[0-9]/.test(pwd)) return "One number required";
@@ -35,7 +35,7 @@ const ResetPassword = () => {
     return null;
   };
 
-  const handleSubmit = async (e:React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     const validationError = validatePassword(password);
@@ -67,7 +67,7 @@ const ResetPassword = () => {
       } else {
         toast.error(res.data.message || "Reset failed");
       }
-    } catch (error:any) {
+    } catch (error: any) {
       toast.error(error?.response?.data?.message || "Reset failed");
     } finally {
       setLoading(false);
@@ -129,8 +129,12 @@ const ResetPassword = () => {
                 placeholder="New password"
                 className="bg-transparent flex-1 outline-none"
               />
-              <button type="button" onClick={() => setShowPassword(!showPassword)}>
-                {showPassword ? <AiFillEyeInvisible /> : <AiFillEye />}
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute right-3 top-3 text-gray-400 hover:text-[#FFD700]"
+              >
+                {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
               </button>
             </div>
 
@@ -147,8 +151,9 @@ const ResetPassword = () => {
               <button
                 type="button"
                 onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                className="absolute right-3 top-3 text-gray-400 hover:text-[#FFD700]"
               >
-                {showConfirmPassword ? <AiFillEyeInvisible /> : <AiFillEye />}
+                {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
               </button>
             </div>
 
@@ -156,9 +161,9 @@ const ResetPassword = () => {
               At least 6 chars, 1 uppercase, 1 number, 1 special character
             </p>
 
-             <button
+            <button
               type="submit"
-              
+              disabled={loading}
               className="flex items-center justify-center gap-3 w-full py-3 rounded-lg bg-gradient-to-r from-[#D4AF37] to-[#FFD700] text-black font-semibold shadow-md"
             >
               {loading ? (
