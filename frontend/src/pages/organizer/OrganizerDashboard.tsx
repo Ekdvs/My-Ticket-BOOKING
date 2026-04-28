@@ -27,7 +27,6 @@ const sidebarItems = [
   { key: "events", label: "All Events", icon: LayoutGrid },
   { key: "addevent", label: "Add Event", icon: PlusCircle },
   { key: "eventcalendar", label: "Event Calendar", icon: Calendar },
-  { key: "allusers", label: "User Management", icon: Users2 },
   { key: "qr", label: "Qr Scan", icon: QrCode },
   { key: "wallet", label: "Wallet", icon: Wallet2 },
   { key: "analytics", label: "Analytics", icon: BarChart3 },
@@ -128,7 +127,7 @@ const OrganizerDashboard = () => {
         <button onClick={() => setSidebarOpen(true)} className="p-1.5 rounded-lg hover:bg-slate-100">
           <Menu className="w-5 h-5 text-slate-600" />
         </button>
-        <h2 className="font-bold text-slate-800">Admin Dashboard</h2>
+        <h2 className="font-bold text-slate-800">Organizer Dashboard</h2>
         <div className="w-8 h-8 rounded-full bg-violet-100 flex items-center justify-center">
           <User size={16} className="text-violet-600" />
         </div>
@@ -226,20 +225,34 @@ const SidebarContent = ({
 
     {/* User */}
     {user && (
-      <div className="flex items-center gap-3 px-3 py-3 bg-indigo-50 rounded-xl mb-6 border border-indigo-100">
-        <div className="w-9 h-9 rounded-full bg-indigo-200 flex items-center justify-center">
-          <User size={16} className="text-indigo-700" />
-        </div>
-        <div>
-          <p className="text-sm font-bold text-slate-900">
-            {user.firstName} {user.lastName}
-          </p>
-          <p className="text-[10px] text-indigo-500 uppercase tracking-wide">
-            {user.role}
-          </p>
-        </div>
-      </div>
-    )}
+  <div className="flex items-center gap-3 px-3 py-3 bg-indigo-50 rounded-xl mb-6 border border-indigo-100">
+
+    <div className="w-9 h-9 rounded-full overflow-hidden bg-indigo-200 flex items-center justify-center">
+
+      {user.avatar ? (
+        <img
+          src={user.avatar}
+          alt="avatar"
+          className="w-full h-full object-cover"
+        />
+      ) : (
+        <User size={16} className="text-indigo-700" />
+      )}
+
+    </div>
+
+    <div>
+      <p className="text-sm font-bold text-slate-900">
+        {user.firstName} {user.lastName}
+      </p>
+
+      <p className="text-[10px] text-indigo-500 uppercase tracking-wide">
+        {user.role}
+      </p>
+    </div>
+
+  </div>
+)}
 
     {/* Menu */}
     <nav className="flex-1 space-y-1">
