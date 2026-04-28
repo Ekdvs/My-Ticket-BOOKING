@@ -13,15 +13,13 @@ import Axios from "../../utils/Axios";
 import SummaryApi from "../../api/SummaryApi";
 import toast from "react-hot-toast";
 import { AnimatePresence, motion } from "framer-motion";
-import DashboardHome from "../admin/DashboardHome";
 import EventForm from "../admin/EventForm";
-import AdminEventCalendar from "../admin/AdminEventCalendar";
 import QrScannerPremium from "../components/QrScannerPremium";
-import Wallet from "../admin/Wallet";
-import MonthlyRevenueChart from "../admin/MonthlyRevenueChart";
-import DailyRevenueChart from "../admin/DailyRevenueChart";
-import WithdrawAdmin from "../admin/WithdrawAdmin";
 import OrganizerEventCards from "./OrganizerEventCards";
+import OrganizerDashboardHome from "./OrganizerDashboardHome";
+import OrganizerWallet from "./OrganizerWallet";
+import OrganizerAnalytics from "./OrganizerAnalytics";
+import OrganizerWithdraw from "./OrganizerWithdraw";
 
 
 const sidebarItems = [
@@ -33,7 +31,7 @@ const sidebarItems = [
   { key: "qr", label: "Qr Scan", icon: QrCode },
   { key: "wallet", label: "Wallet", icon: Wallet2 },
   { key: "analytics", label: "Analytics", icon: BarChart3 },
-  { key: "withdrawals", label: "Withdrawals", icon: CreditCard },
+  { key: "withdrawal", label: "Withdrawals", icon: CreditCard },
 ];
 
 const OrganizerDashboard = () => {
@@ -93,38 +91,19 @@ const OrganizerDashboard = () => {
   const renderContent = () => {
     switch (activeSection) {
       case "dashboard":
-        return <DashboardHome user={user} onNavigate={setActiveSection} />;
+        return <OrganizerDashboardHome />;
       case "events":
         return <OrganizerEventCards />;
       case "addevent":
-        return (
-          <div className="max-w-xl mx-auto">
-            <h1 className="text-2xl font-bold text-slate-800 mb-6">
-              Create New Event
-            </h1>
-            <div className="bg-white rounded-2xl shadow-sm border border-slate-100 p-6">
-              <EventForm onClose={() => setActiveSection("events")} />
-            </div>
-          </div>
-        );
-      case "eventcalendar":
-        return <AdminEventCalendar />;
-        case "qr":
+        return <EventForm />;
+      case "qr":
         return <QrScannerPremium />;
-     
       case "wallet":
-  return <Wallet />;
-
-case "analytics":
-  return (
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-      <DailyRevenueChart />
-      <MonthlyRevenueChart />
-    </div>
-  );
-
-case "withdrawals":
-  return <WithdrawAdmin />;
+        return <OrganizerWallet />;
+      case "analytics":
+        return <OrganizerAnalytics />;
+      case "withdrawal":
+        return <OrganizerWithdraw />;
       default:
         return null;
     }

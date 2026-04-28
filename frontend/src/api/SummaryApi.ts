@@ -37,19 +37,32 @@ const SummaryApi = {
   admin_event_chart: { url: "/admin/event-chart", method: "get" },
   admin_scan_chart: { url: "/admin/scan-chart", method: "get" },
 
-  withdraw_request: { url: "/organizer/earnings", method: "post" },
-withdraw_list: { url: "/organizer/withdrawals", method: "get" },
+ // Organizer Dashboard
+  organizer_stats: { url: "/organizer/stats", method: "get" },
+  organizer_event_chart: { url: "/organizer/event-chart", method: "get" },
+  organizer_earnings: { url: "/organizer/earnings", method: "get" },
+  organizer_daily_revenue: { url: "/organizer/daily-revenue", method: "get" },
+  organizer_monthly_revenue: { url: "/organizer/monthly-revenue", method: "get" },
+  organizer_summary: { url: "/organizer/earning-summary", method: "get" },
 
-admin_withdraw_list: { url: "/admin/withdrawals", method: "get" },
-admin_approve_withdraw: (id: string) => ({
-  url: `/admin/approve-withdraw/${id}`,
-  method: "patch",
-}),
+  // ✅ FIXED WALLET
+  organizer_wallet: { url: "/organizer/wallet", method: "get" },
+
+  // ✅ FIXED WITHDRAW
+  withdraw_request: { url: "/organizer/withdraw", method: "post" },
+  withdraw_list: { url: "/organizer/withdrawals", method: "get" },
+
+  // Admin
+  admin_withdraw_list: { url: "/admin/withdrawals", method: "get" },
+  admin_approve_withdraw: (id: string) => ({
+    url: `/admin/approve-withdraw/${id}`,
+    method: "patch",
+  }),
 
 admin_daily_revenue: { url: "/admin/daily-revenue", method: "get" },
 admin_monthly_revenue: { url: "/admin/monthly-revenue", method: "get" },
 
-organizer_wallet: { url: "/organizer/earnings", method: "get" },
+
 admin_notifications:       { url: "/api/notifications/admin",            method: "GET" },
 my_notifications:          { url: "/api/notifications/my",               method: "GET" },
 admin_unread_count:        { url: "/api/notifications/admin/unread-count", method: "GET" },

@@ -99,7 +99,7 @@ const QrScannerPremium = () => {
     setTimeout(() => {
       setResult(null);
       setScanning(true);
-    }, 3000);
+    }, 10000);
   };
 
   return (

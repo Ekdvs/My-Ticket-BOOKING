@@ -2,7 +2,6 @@ import {
   Calendar, LogOut, Menu, User, X, LayoutGrid,
   Users2, PlusCircle, Home,
   QrCode,
-  Wallet2,
   BarChart3,
   CreditCard
 } from "lucide-react";
@@ -18,7 +17,6 @@ import AdminEventCards from "./AdminEventCards";
 import EventForm from "./EventForm";
 import DashboardHome from "./DashboardHome";
 import QrScannerPremium from "../components/QrScannerPremium";
-import Wallet from "./Wallet";
 import DailyRevenueChart from "./DailyRevenueChart";
 import MonthlyRevenueChart from "./MonthlyRevenueChart";
 import WithdrawAdmin from "./WithdrawAdmin";
@@ -30,7 +28,6 @@ const sidebarItems = [
   { key: "eventcalendar", label: "Event Calendar", icon: Calendar },
   { key: "allusers", label: "User Management", icon: Users2 },
   { key: "qr", label: "Qr Scan", icon: QrCode },
-  { key: "wallet", label: "Wallet", icon: Wallet2 },
   { key: "analytics", label: "Analytics", icon: BarChart3 },
   { key: "withdrawals", label: "Withdrawals", icon: CreditCard },
 ];
@@ -112,8 +109,7 @@ const AdminDashboard = () => {
         return <QrScannerPremium />;
       case "allusers":
         return <AllUsers token={token as string} />;
-      case "wallet":
-  return <Wallet />;
+      
 
 case "analytics":
   return (
