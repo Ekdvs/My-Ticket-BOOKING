@@ -61,6 +61,9 @@ const ForgotPassword: React.FC = () => {
           className="w-[160px] h-[160px] object-contain opacity-95 drop-shadow-lg"
         />
 
+
+        
+
         <h1 className="text-5xl font-bold text-[#FFD700] text-center leading-tight">
           Reset Your Password Securely
         </h1>
