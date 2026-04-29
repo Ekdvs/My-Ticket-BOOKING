@@ -1,13 +1,13 @@
-
- import {
+import {
   Calendar, LogOut, Menu, User, X, LayoutGrid,
   Users2, PlusCircle, Home,
   QrCode,
   Wallet2,
   BarChart3,
-  CreditCard
+  CreditCard,
+  Settings
 } from "lucide-react";
-import { useEffect, useState } from "react";
+import { cacheSignal, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Axios from "../../utils/Axios";
 import SummaryApi from "../../api/SummaryApi";
@@ -20,7 +20,10 @@ import OrganizerDashboardHome from "./OrganizerDashboardHome";
 import OrganizerWallet from "./OrganizerWallet";
 import OrganizerAnalytics from "./OrganizerAnalytics";
 import OrganizerWithdraw from "./OrganizerWithdraw";
-
+import OrganizerNotificationBell from "./OrganizerNotificationBell"; // ✅ ADD THIS
+import Setting from "../user/Setting";
+import Profile from "../user/Profile";
+import OraganizerEventCalendar from "./OraganizerEventCalander";
 
 const sidebarItems = [
   { key: "dashboard", label: "Dashboard", icon: Home },
@@ -31,6 +34,8 @@ const sidebarItems = [
   { key: "wallet", label: "Wallet", icon: Wallet2 },
   { key: "analytics", label: "Analytics", icon: BarChart3 },
   { key: "withdrawal", label: "Withdrawals", icon: CreditCard },
+  { key: "profile",   label: "Profile",     icon: User },
+  { key: "settings",  label: "Settings",    icon: Settings },
 ];
 
 const OrganizerDashboard = () => {
@@ -44,18 +49,13 @@ const OrganizerDashboard = () => {
 
   useEffect(() => {
     const fetchUserData = async () => {
-      if (!token) {
-        navigate("/login");
-        return;
-      }
-
+      if (!token) { navigate("/login"); return; }
       try {
         const res = await Axios({
           method: SummaryApi.login_user.method,
           url: SummaryApi.login_user.url,
           withCredentials: true,
         });
-
         if (res.data.success) {
           if (res.data.data.role !== "ORGANIZER") navigate("/login");
           setUser(res.data.data);
@@ -70,7 +70,6 @@ const OrganizerDashboard = () => {
         setLoading(false);
       }
     };
-
     fetchUserData();
   }, [token, navigate]);
 
@@ -82,29 +81,23 @@ const OrganizerDashboard = () => {
         headers: { Authorization: `Bearer ${token}` },
       });
     } catch {}
-
     localStorage.clear();
     navigate("/login");
   };
 
   const renderContent = () => {
     switch (activeSection) {
-      case "dashboard":
-        return <OrganizerDashboardHome />;
-      case "events":
-        return <OrganizerEventCards />;
-      case "addevent":
-        return <EventForm />;
-      case "qr":
-        return <QrScannerPremium />;
-      case "wallet":
-        return <OrganizerWallet />;
-      case "analytics":
-        return <OrganizerAnalytics />;
-      case "withdrawal":
-        return <OrganizerWithdraw />;
-      default:
-        return null;
+      case "dashboard": return <OrganizerDashboardHome />;
+      case "events": return <OrganizerEventCards />;
+      case "addevent": return <EventForm />;
+      case "qr": return <QrScannerPremium />;
+      case "wallet": return <OrganizerWallet />;
+      case "analytics": return <OrganizerAnalytics />;
+      case "withdrawal": return <OrganizerWithdraw />;
+      case "profile": return <Profile user={user} />;
+      case "settings": return <Setting user={user} />;
+      case "eventcalendar": return <OraganizerEventCalendar />;
+      default: return null;
     }
   };
 
@@ -122,14 +115,19 @@ const OrganizerDashboard = () => {
   return (
     <div className="h-screen flex bg-slate-50 mt-[64px] overflow-hidden">
 
-      {/* Mobile Header */}
+      {/* ── Mobile Header ── */}
       <div className="md:hidden fixed top-16 left-0 right-0 z-40 bg-white shadow-sm border-b border-slate-100 flex items-center justify-between px-4 py-3">
         <button onClick={() => setSidebarOpen(true)} className="p-1.5 rounded-lg hover:bg-slate-100">
           <Menu className="w-5 h-5 text-slate-600" />
         </button>
         <h2 className="font-bold text-slate-800">Organizer Dashboard</h2>
-        <div className="w-8 h-8 rounded-full bg-violet-100 flex items-center justify-center">
-          <User size={16} className="text-violet-600" />
+
+        {/* ✅ Bell + avatar */}
+        <div className="flex items-center gap-2">
+          <OrganizerNotificationBell />
+          <div className="w-8 h-8 rounded-full bg-violet-100 flex items-center justify-center">
+            <User size={16} className="text-violet-600" />
+          </div>
         </div>
       </div>
 
@@ -195,80 +193,60 @@ const OrganizerDashboard = () => {
 
 /* ───────── Sidebar ───────── */
 const SidebarContent = ({
-  user,
-  activeSection,
-  onSelect,
-  onLogout,
-  onClose,
-  isMobile
+  user, activeSection, onSelect, onLogout, onClose, isMobile
 }: any) => (
   <div className="flex flex-col h-full p-5">
 
     {/* Top */}
     <div className="flex items-center justify-between mb-8">
       <div>
-        <h1 className="text-lg font-black text-slate-900">Admin Panel</h1>
+        <h1 className="text-lg font-black text-slate-900">Organizer Panel</h1>
         <p className="text-xs text-indigo-500 font-semibold">
           {sidebarItems.find(item => item.key === activeSection)?.label}
         </p>
       </div>
 
-      {isMobile && (
-        <button
-          onClick={onClose}
-          className="p-1.5 rounded-lg hover:bg-slate-100 transition"
-        >
-          <X size={18} className="text-slate-600" />
-        </button>
-      )}
+      {/* ✅ Bell + close button */}
+      <div className="flex items-center gap-1">
+        <OrganizerNotificationBell />
+        {isMobile && (
+          <button onClick={onClose} className="p-1.5 rounded-lg hover:bg-slate-100 transition">
+            <X size={18} className="text-slate-600" />
+          </button>
+        )}
+      </div>
     </div>
 
     {/* User */}
     {user && (
-  <div className="flex items-center gap-3 px-3 py-3 bg-indigo-50 rounded-xl mb-6 border border-indigo-100">
-
-    <div className="w-9 h-9 rounded-full overflow-hidden bg-indigo-200 flex items-center justify-center">
-
-      {user.avatar ? (
-        <img
-          src={user.avatar}
-          alt="avatar"
-          className="w-full h-full object-cover"
-        />
-      ) : (
-        <User size={16} className="text-indigo-700" />
-      )}
-
-    </div>
-
-    <div>
-      <p className="text-sm font-bold text-slate-900">
-        {user.firstName} {user.lastName}
-      </p>
-
-      <p className="text-[10px] text-indigo-500 uppercase tracking-wide">
-        {user.role}
-      </p>
-    </div>
-
-  </div>
-)}
+      <div className="flex items-center gap-3 px-3 py-3 bg-indigo-50 rounded-xl mb-6 border border-indigo-100">
+        <div className="w-9 h-9 rounded-full overflow-hidden bg-indigo-200 flex items-center justify-center">
+          {user.avatar ? (
+            <img src={user.avatar} alt="avatar" className="w-full h-full object-cover" />
+          ) : (
+            <User size={16} className="text-indigo-700" />
+          )}
+        </div>
+        <div>
+          <p className="text-sm font-bold text-slate-900">{user.firstName} {user.lastName}</p>
+          <p className="text-[10px] text-indigo-500 uppercase tracking-wide">{user.role}</p>
+        </div>
+      </div>
+    )}
 
     {/* Menu */}
     <nav className="flex-1 space-y-1">
       {sidebarItems.map(({ key, label, icon: Icon }) => {
         const isActive = activeSection === key;
-
         return (
           <motion.button
             key={key}
             whileHover={{ scale: 1.03 }}
             onClick={() => onSelect(key)}
             className={`w-full flex items-center gap-3 px-3.5 py-3 rounded-xl text-sm font-semibold transition-all relative
-              ${
-                isActive
-                  ? "bg-indigo-600 text-white shadow-md shadow-indigo-200"
-                  : "text-slate-700 hover:bg-slate-100 hover:text-slate-900"
+              ${isActive
+                ? "bg-indigo-600 text-white shadow-md shadow-indigo-200"
+                : "text-slate-700 hover:bg-slate-100 hover:text-slate-900"
               }`}
           >
             {isActive && (
@@ -277,14 +255,9 @@ const SidebarContent = ({
                 className="absolute left-0 top-0 h-full w-1 bg-white/80 rounded-r"
               />
             )}
-
-            <motion.div
-              animate={{ rotate: isActive ? 360 : 0 }}
-              transition={{ duration: 0.4 }}
-            >
+            <motion.div animate={{ rotate: isActive ? 360 : 0 }} transition={{ duration: 0.4 }}>
               <Icon size={17} />
             </motion.div>
-
             {label}
           </motion.button>
         );

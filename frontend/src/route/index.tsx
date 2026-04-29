@@ -9,6 +9,7 @@ import ResetPassword from "../pages/user/ResetPassword";
 import UserDashboard from "../pages/user/UserDashboard";
 import AdminDashboard from "../pages/admin/AdminDashbord";
 import OrganizerDashboard from "../pages/organizer/OrganizerDashboard";
+import HomePage from "../pages/pages/Home";
 
 
 const router = createBrowserRouter(
@@ -25,6 +26,7 @@ const router = createBrowserRouter(
                 {path:"/dashboard", element:<UserDashboard/>},
                 {path:"/admin", element:<AdminDashboard/>},
                 {path:"/organizer", element:<OrganizerDashboard/>},
+                {path:"/",element:<HomePage/>}
             
             ]
         }

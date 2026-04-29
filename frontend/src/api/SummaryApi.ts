@@ -19,6 +19,7 @@ const SummaryApi = {
   role_change: { url: "/user/role-change", method: "put" },
   delete_user: { url: "/user/delete", method: "delete" },
   status_change: { url: "/user/status-change", method: "put" },
+  update_profile: { url: "/user/update", method: "put" },
 
   // Event APIs
   create_event: { url: "/event/create", method: "post" },
@@ -63,11 +64,16 @@ admin_daily_revenue: { url: "/admin/daily-revenue", method: "get" },
 admin_monthly_revenue: { url: "/admin/monthly-revenue", method: "get" },
 
 
-admin_notifications:       { url: "/api/notifications/admin",            method: "GET" },
-my_notifications:          { url: "/api/notifications/my",               method: "GET" },
-admin_unread_count:        { url: "/api/notifications/admin/unread-count", method: "GET" },
-my_unread_count:           { url: "/api/notifications/unread-count",     method: "GET" },
-mark_notification_read: (id: string) => ({ url: `/api/notifications/read/${id}`, method: "PATCH" }),
+admin_notifications:       { url: "/notifications/admin",            method: "GET" },
+my_notifications:          { url: "/notifications/my",               method: "GET" },
+admin_unread_count:        { url: "/notifications/admin/unread-count", method: "GET" },
+my_unread_count:           { url: "/notifications/unread-count",     method: "GET" },
+mark_notification_read: (id: string) => ({ url: `/notifications/read/${id}`, method: "PATCH" }),
+
+get_my_tickets:{
+  url:"/bookings/my-tickets",
+  method:"get"
+}
 };
 
 

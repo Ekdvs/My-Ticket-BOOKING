@@ -1,9 +1,7 @@
 import {
   Calendar, LogOut, Menu, User, X, LayoutGrid,
-  Users2, PlusCircle, Home,
-  QrCode,
-  BarChart3,
-  CreditCard
+  Users2, PlusCircle, Home, QrCode, BarChart3, CreditCard,
+  Settings
 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -20,6 +18,9 @@ import QrScannerPremium from "../components/QrScannerPremium";
 import DailyRevenueChart from "./DailyRevenueChart";
 import MonthlyRevenueChart from "./MonthlyRevenueChart";
 import WithdrawAdmin from "./WithdrawAdmin";
+import AdminNotificationBell from "./AdminNotificationBell"; // ✅ ADD THIS
+import Setting from "../user/Setting";
+import Profile from "../user/Profile";
 
 const sidebarItems = [
   { key: "dashboard", label: "Dashboard", icon: Home },
@@ -30,6 +31,8 @@ const sidebarItems = [
   { key: "qr", label: "Qr Scan", icon: QrCode },
   { key: "analytics", label: "Analytics", icon: BarChart3 },
   { key: "withdrawals", label: "Withdrawals", icon: CreditCard },
+  { key: "profile",   label: "Profile",     icon: User },
+  { key: "settings",  label: "Settings",    icon: Settings },
 ];
 
 const AdminDashboard = () => {
@@ -43,18 +46,13 @@ const AdminDashboard = () => {
 
   useEffect(() => {
     const fetchUserData = async () => {
-      if (!token) {
-        navigate("/login");
-        return;
-      }
-
+      if (!token) { navigate("/login"); return; }
       try {
         const res = await Axios({
           method: SummaryApi.login_user.method,
           url: SummaryApi.login_user.url,
           withCredentials: true,
         });
-
         if (res.data.success) {
           if (res.data.data.role !== "ADMIN") navigate("/login");
           setUser(res.data.data);
@@ -69,7 +67,6 @@ const AdminDashboard = () => {
         setLoading(false);
       }
     };
-
     fetchUserData();
   }, [token, navigate]);
 
@@ -81,7 +78,6 @@ const AdminDashboard = () => {
         headers: { Authorization: `Bearer ${token}` },
       });
     } catch {}
-
     localStorage.clear();
     navigate("/login");
   };
@@ -95,9 +91,7 @@ const AdminDashboard = () => {
       case "addevent":
         return (
           <div className="max-w-xl mx-auto">
-            <h1 className="text-2xl font-bold text-slate-800 mb-6">
-              Create New Event
-            </h1>
+            <h1 className="text-2xl font-bold text-slate-800 mb-6">Create New Event</h1>
             <div className="bg-white rounded-2xl shadow-sm border border-slate-100 p-6">
               <EventForm onClose={() => setActiveSection("events")} />
             </div>
@@ -105,22 +99,23 @@ const AdminDashboard = () => {
         );
       case "eventcalendar":
         return <AdminEventCalendar />;
-        case "qr":
+      case "qr":
         return <QrScannerPremium />;
       case "allusers":
-        return <AllUsers token={token as string} />;
-      
-
-case "analytics":
-  return (
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-      <DailyRevenueChart />
-      <MonthlyRevenueChart />
-    </div>
-  );
-
-case "withdrawals":
-  return <WithdrawAdmin />;
+        return <AllUsers  />;
+      case "analytics":
+        return (
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <DailyRevenueChart />
+            <MonthlyRevenueChart />
+          </div>
+        );
+      case "withdrawals":
+        return <WithdrawAdmin />;
+      case "profile":
+        return <Profile user={user} />;
+      case "settings":
+        return <Setting user={user} />;
       default:
         return null;
     }
@@ -140,14 +135,19 @@ case "withdrawals":
   return (
     <div className="h-screen flex bg-slate-50 mt-[64px] overflow-hidden">
 
-      {/* Mobile Header */}
+      {/* ── Mobile Header ── */}
       <div className="md:hidden fixed top-16 left-0 right-0 z-40 bg-white shadow-sm border-b border-slate-100 flex items-center justify-between px-4 py-3">
         <button onClick={() => setSidebarOpen(true)} className="p-1.5 rounded-lg hover:bg-slate-100">
           <Menu className="w-5 h-5 text-slate-600" />
         </button>
         <h2 className="font-bold text-slate-800">Admin Dashboard</h2>
-        <div className="w-8 h-8 rounded-full bg-violet-100 flex items-center justify-center">
-          <User size={16} className="text-violet-600" />
+
+        {/* ✅ Bell added to mobile header */}
+        <div className="flex items-center gap-2">
+          <AdminNotificationBell />
+          <div className="w-8 h-8 rounded-full bg-violet-100 flex items-center justify-center">
+            <User size={16} className="text-violet-600" />
+          </div>
         </div>
       </div>
 
@@ -213,12 +213,7 @@ case "withdrawals":
 
 /* ───────── Sidebar ───────── */
 const SidebarContent = ({
-  user,
-  activeSection,
-  onSelect,
-  onLogout,
-  onClose,
-  isMobile
+  user, activeSection, onSelect, onLogout, onClose, isMobile
 }: any) => (
   <div className="flex flex-col h-full p-5">
 
@@ -231,14 +226,15 @@ const SidebarContent = ({
         </p>
       </div>
 
-      {isMobile && (
-        <button
-          onClick={onClose}
-          className="p-1.5 rounded-lg hover:bg-slate-100 transition"
-        >
-          <X size={18} className="text-slate-600" />
-        </button>
-      )}
+      {/* ✅ Bell added to desktop sidebar header */}
+      <div className="flex items-center gap-1">
+        <AdminNotificationBell />
+        {isMobile && (
+          <button onClick={onClose} className="p-1.5 rounded-lg hover:bg-slate-100 transition">
+            <X size={18} className="text-slate-600" />
+          </button>
+        )}
+      </div>
     </div>
 
     {/* User */}
@@ -248,12 +244,8 @@ const SidebarContent = ({
           <User size={16} className="text-indigo-700" />
         </div>
         <div>
-          <p className="text-sm font-bold text-slate-900">
-            {user.firstName} {user.lastName}
-          </p>
-          <p className="text-[10px] text-indigo-500 uppercase tracking-wide">
-            {user.role}
-          </p>
+          <p className="text-sm font-bold text-slate-900">{user.firstName} {user.lastName}</p>
+          <p className="text-[10px] text-indigo-500 uppercase tracking-wide">{user.role}</p>
         </div>
       </div>
     )}
@@ -262,17 +254,15 @@ const SidebarContent = ({
     <nav className="flex-1 space-y-1">
       {sidebarItems.map(({ key, label, icon: Icon }) => {
         const isActive = activeSection === key;
-
         return (
           <motion.button
             key={key}
             whileHover={{ scale: 1.03 }}
             onClick={() => onSelect(key)}
             className={`w-full flex items-center gap-3 px-3.5 py-3 rounded-xl text-sm font-semibold transition-all relative
-              ${
-                isActive
-                  ? "bg-indigo-600 text-white shadow-md shadow-indigo-200"
-                  : "text-slate-700 hover:bg-slate-100 hover:text-slate-900"
+              ${isActive
+                ? "bg-indigo-600 text-white shadow-md shadow-indigo-200"
+                : "text-slate-700 hover:bg-slate-100 hover:text-slate-900"
               }`}
           >
             {isActive && (
@@ -281,14 +271,9 @@ const SidebarContent = ({
                 className="absolute left-0 top-0 h-full w-1 bg-white/80 rounded-r"
               />
             )}
-
-            <motion.div
-              animate={{ rotate: isActive ? 360 : 0 }}
-              transition={{ duration: 0.4 }}
-            >
+            <motion.div animate={{ rotate: isActive ? 360 : 0 }} transition={{ duration: 0.4 }}>
               <Icon size={17} />
             </motion.div>
-
             {label}
           </motion.button>
         );

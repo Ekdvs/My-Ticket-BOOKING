@@ -6,6 +6,8 @@ import { Link, useNavigate } from "react-router-dom";
 import { useGoogleLogin } from "@react-oauth/google";
 import { Eye, EyeOff, UserPlus } from "lucide-react";
 import { FcGoogle } from "react-icons/fc";
+import Footer from "../components/Footer";
+import Navbar from "../components/Navbar";
 
 interface FormData {
     email: string;
@@ -151,7 +153,9 @@ const Register: React.FC = () => {
     };
 
     return (
-        <div className="w-full h-screen bg-[url('/bglogin.png')] bg-cover bg-center flex items-center justify-center mt-[30px]">
+        <>
+        <Navbar/>
+        <div className="w-full h-screen bg-[url('/bglogin.png')] bg-cover bg-center flex items-center justify-center ">
             {/* Left Section */}
             <div className="hidden lg:flex w-[50%] h-full flex-col items-center justify-center gap-8 bg-purple-600/50 p-10 text-center">
 
@@ -280,6 +284,8 @@ const Register: React.FC = () => {
                 </div>
             </div>
         </div>
+        <Footer/>
+        </>
     );
 };
 
