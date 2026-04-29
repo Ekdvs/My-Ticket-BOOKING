@@ -6,6 +6,8 @@ import SummaryApi from '../../api/SummaryApi';
 import { Eye, EyeOff, LogIn } from 'lucide-react';
 import { FcGoogle } from 'react-icons/fc';
 import { useGoogleLogin } from '@react-oauth/google';
+import Navbar from '../components/Navbar';
+import Footer from '../components/Footer';
 
 
 
@@ -157,6 +159,8 @@ const Login = () => {
 
 
     return (
+        <>
+        <Navbar/>
         <div className="w-full h-screen bg-[url('/bglogin.png')] bg-cover flex items-center justify-center">
             {/*Left SSection */}
             <div className="hidden lg:flex w-[50%] h-full flex-col items-center justify-center gap-8 bg-purple-600/50 p-10">
@@ -228,6 +232,8 @@ const Login = () => {
             </div>
 
         </div>
+        <Footer/>
+        </>
     )
 }
 

@@ -40,10 +40,10 @@ const FOOTER_LINKS = {
 };
 
 const SOCIALS = [
-  { icon: FaFacebook, href: "#", label: "Facebook" },
-  { icon: FaInstagram, href: "#", label: "Instagram" },
-  { icon: FaTwitter, href: "#", label: "Twitter" },
-  { icon: FaYoutube, href: "#", label: "YouTube" },
+  { icon: FaFacebook, href: "https://facebook.com", label: "Facebook" },
+  { icon: FaInstagram, href: "https://instagram.com", label: "Instagram" },
+  { icon: FaTwitter, href: "https://twitter.com", label: "Twitter" },
+  { icon: FaYoutube, href: "https://youtube.com", label: "YouTube" },
 ];
 
 export default function Footer() {
@@ -146,7 +146,9 @@ export default function Footer() {
             {SOCIALS.map(({ icon: Icon, label }) => (
               <a
                 key={label}
-                href="#"
+                href={label === "Facebook" ? "https://facebook.com" : label === "Instagram" ? "https://instagram.com" : label === "Twitter" ? "https://twitter.com" : "https://youtube.com"}
+                target="_blank"
+                rel="noopener noreferrer"
                 className="w-9 h-9 bg-white/5 rounded-xl flex items-center justify-center hover:bg-white/10"
               >
                 <Icon size={16} />

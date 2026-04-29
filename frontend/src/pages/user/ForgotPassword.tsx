@@ -4,6 +4,8 @@ import SummaryApi from "../../api/SummaryApi";
 import Axios from "../../utils/Axios";
 import toast from "react-hot-toast";
 import { FaEnvelope } from "react-icons/fa";
+import Footer from "../components/Footer";
+import Navbar from "../components/Navbar";
 
 const ForgotPassword: React.FC = () => {
   const navigate = useNavigate();
@@ -47,6 +49,7 @@ const ForgotPassword: React.FC = () => {
   };
 
   return (
+    <><Navbar/>
     <div className="w-full h-screen bg-[url('/bglogin.png')] bg-cover flex items-center justify-center">
 
       {/* LEFT SECTION (same as login) */}
@@ -138,6 +141,8 @@ const ForgotPassword: React.FC = () => {
         </div>
       </div>
     </div>
+    <Footer/>
+    </>
   );
 };
 

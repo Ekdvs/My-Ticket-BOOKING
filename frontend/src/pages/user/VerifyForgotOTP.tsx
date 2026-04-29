@@ -4,6 +4,8 @@ import { useLocation, useNavigate } from "react-router-dom";
 import Axios from "../../utils/Axios";
 import SummaryApi from "../../api/SummaryApi";
 import { FaEnvelope, FaKey } from "react-icons/fa";
+import  Navbar from "../components/Navbar";
+import  Footer from "../components/Footer";
 
 const VerifyForgotOTP = () => {
   const navigate = useNavigate();
@@ -86,6 +88,8 @@ const VerifyForgotOTP = () => {
   };
 
   return (
+
+    <><Navbar/>
     <div className="w-full h-screen bg-[url('/bglogin.png')] bg-cover flex items-center justify-center">
 
       {/* LEFT */}
@@ -173,6 +177,8 @@ const VerifyForgotOTP = () => {
         </div>
       </div>
     </div>
+    <Footer/>
+    </>
   );
 };
 
