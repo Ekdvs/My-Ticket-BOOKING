@@ -1,0 +1,20 @@
+import axios from "axios";
+import { baseURL } from "../api/SummaryApi";
+
+
+
+const Axios=axios.create({
+    baseURL:baseURL,
+    withCredentials:true,
+})
+
+// Automatically add Authorization header
+Axios.interceptors.request.use((config) => {
+  const token = localStorage.getItem("accessToken");
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
+  return config;
+});
+
+export default Axios;
