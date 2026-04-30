@@ -1,6 +1,6 @@
-//export const baseURL = import.meta.env.VITE_API_BASE_URL;
+export const baseURL = import.meta.env.VITE_API_BASE_URL;
 
-const baseURL="https://ticket-booking-backend-j5wu.onrender.com/api"
+
 
 const SummaryApi = {
   // Auth APIs
