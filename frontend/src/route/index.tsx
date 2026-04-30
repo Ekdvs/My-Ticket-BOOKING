@@ -32,6 +32,7 @@ import PressKit from "../pages/pages/PressKit";
 import HelpCenter from "../pages/pages/HelpCenter";
 import Report from "../pages/pages/Report";
 import Accessibility from "../pages/pages/Accessibility";
+import VerifyEmail from "../pages/user/VerifyEmail";
 
 
 
@@ -76,6 +77,7 @@ const router = createBrowserRouter([
       { path: "/careers", element: <Careers /> },
      { path: "/blog", element: <Blog /> },
      { path: "/press", element: <PressKit /> },
+     {path: "/verify-email/:token", element: <VerifyEmail />}
 
       
     ],

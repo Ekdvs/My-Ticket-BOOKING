@@ -11,6 +11,7 @@ const SummaryApi = {
   }),
   verify_forgot_otp: { url: "/auth/verify-otp", method: "post" },
   reset_password: { url: "/auth/reset-password", method: "put" },
+  verifyEmail: (token: string) => ({ url: `/auth/verify-email/${token}`, method: "post" }),
 
   // User APIs
   login_user: { url: "/user/me", method: "get" },
