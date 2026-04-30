@@ -3,7 +3,7 @@ import Axios from "../../utils/Axios";
 import SummaryApi from "../../api/SummaryApi";
 import {
   TrendingUp, BarChart2, RefreshCw,
-  Calendar, CalendarDays, CheckCircle2, XCircle, Coins
+  Calendar, CalendarDays, CheckCircle2,  Coins
 } from "lucide-react";
 import {
   LineChart, Line, BarChart, Bar, XAxis, YAxis,

@@ -1,4 +1,4 @@
-import { LogOut, Menu, User, X, Home, Ticket, Bell, Settings } from "lucide-react";
+import { LogOut, Menu, User, X, Home, Ticket,  Settings } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Axios from "../../utils/Axios";

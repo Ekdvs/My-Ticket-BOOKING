@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { HelpCircle, ChevronDown, Ticket, CreditCard, RefreshCw, User, Bell } from "lucide-react";
+import { HelpCircle, ChevronDown, Ticket, CreditCard, RefreshCw, User } from "lucide-react";
 import Footer from "../components/Footer";
 import Navbar from "../components/Navbar";
 
@@ -86,7 +86,12 @@ const categories = [
   },
 ];
 
-function FAQItem({ q, a }) {
+type FAQItemProps = {
+  q: string;
+  a: string;
+};
+
+function FAQItem({ q, a }: FAQItemProps) {
   const [open, setOpen] = useState(false);
   return (
     <div className="border-b border-white/5 last:border-0">
@@ -112,65 +117,64 @@ export default function FAQ() {
   const active = categories.find((c) => c.id === activeCategory);
 
   return (
-
     <>
-    <Navbar/>
-    <div className="min-h-screen bg-gray-950 text-gray-300">
-      {/* Hero */}
-      <div className="relative border-b border-white/5 bg-gradient-to-br from-gray-900 to-gray-950">
-        <div className="absolute inset-0 bg-orange-500/5 pointer-events-none" />
-        <div className="max-w-4xl mx-auto px-6 py-20 text-center relative">
-          <div className="inline-flex items-center gap-2 bg-orange-500/10 border border-orange-500/20 rounded-full px-4 py-1.5 mb-6">
-            <HelpCircle size={14} className="text-orange-400" />
-            <span className="text-xs text-orange-400 font-semibold tracking-wider uppercase">Help Center</span>
+      <Navbar />
+      <div className="min-h-screen bg-gray-950 text-gray-300">
+        {/* Hero */}
+        <div className="relative border-b border-white/5 bg-gradient-to-br from-gray-900 to-gray-950">
+          <div className="absolute inset-0 bg-orange-500/5 pointer-events-none" />
+          <div className="max-w-4xl mx-auto px-6 py-20 text-center relative">
+            <div className="inline-flex items-center gap-2 bg-orange-500/10 border border-orange-500/20 rounded-full px-4 py-1.5 mb-6">
+              <HelpCircle size={14} className="text-orange-400" />
+              <span className="text-xs text-orange-400 font-semibold tracking-wider uppercase">Help Center</span>
+            </div>
+            <h1 className="text-4xl md:text-5xl font-black text-white mb-4">Frequently Asked Questions</h1>
+            <p className="text-gray-400 max-w-xl mx-auto text-lg">
+              Find quick answers to the most common questions about MyTickets.
+            </p>
           </div>
-          <h1 className="text-4xl md:text-5xl font-black text-white mb-4">Frequently Asked Questions</h1>
-          <p className="text-gray-400 max-w-xl mx-auto text-lg">
-            Find quick answers to the most common questions about MyTickets.
-          </p>
         </div>
-      </div>
 
-      <div className="max-w-4xl mx-auto px-6 py-16">
-        {/* Category tabs */}
-        <div className="flex flex-wrap gap-3 mb-10">
-          {categories.map(({ id, icon: Icon, label }) => (
-            <button
-              key={id}
-              onClick={() => setActiveCategory(id)}
-              className={`flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold transition-all ${
-                activeCategory === id
-                  ? "bg-gradient-to-r from-orange-500 to-red-500 text-white"
-                  : "bg-gray-900 border border-white/5 text-gray-400 hover:text-white"
-              }`}
+        <div className="max-w-4xl mx-auto px-6 py-16">
+          {/* Category tabs */}
+          <div className="flex flex-wrap gap-3 mb-10">
+            {categories.map(({ id, icon: Icon, label }) => (
+              <button
+                key={id}
+                onClick={() => setActiveCategory(id)}
+                className={`flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold transition-all ${
+                  activeCategory === id
+                    ? "bg-gradient-to-r from-orange-500 to-red-500 text-white"
+                    : "bg-gray-900 border border-white/5 text-gray-400 hover:text-white"
+                }`}
+              >
+                <Icon size={14} />
+                {label}
+              </button>
+            ))}
+          </div>
+
+          {/* FAQ list */}
+          <div className="bg-gray-900 border border-white/5 rounded-2xl px-8">
+            {active?.faqs.map((faq) => (
+              <FAQItem key={faq.q} q={faq.q} a={faq.a} />
+            ))}
+          </div>
+
+          {/* Still need help */}
+          <div className="mt-10 bg-gradient-to-r from-orange-500/10 to-red-500/10 border border-orange-500/20 rounded-2xl p-8 text-center">
+            <h3 className="text-white font-bold text-lg mb-2">Still need help?</h3>
+            <p className="text-gray-400 text-sm mb-4">Our support team is available 24/7 to assist you.</p>
+            <a
+              href="/contact"
+              className="inline-flex items-center gap-2 bg-gradient-to-r from-orange-500 to-red-500 text-white px-6 py-2.5 rounded-xl text-sm font-bold"
             >
-              <Icon size={14} />
-              {label}
-            </button>
-          ))}
-        </div>
-
-        {/* FAQ list */}
-        <div className="bg-gray-900 border border-white/5 rounded-2xl px-8">
-          {active.faqs.map((faq) => (
-            <FAQItem key={faq.q} q={faq.q} a={faq.a} />
-          ))}
-        </div>
-
-        {/* Still need help */}
-        <div className="mt-10 bg-gradient-to-r from-orange-500/10 to-red-500/10 border border-orange-500/20 rounded-2xl p-8 text-center">
-          <h3 className="text-white font-bold text-lg mb-2">Still need help?</h3>
-          <p className="text-gray-400 text-sm mb-4">Our support team is available 24/7 to assist you.</p>
-          <a
-            href="/contact"
-            className="inline-flex items-center gap-2 bg-gradient-to-r from-orange-500 to-red-500 text-white px-6 py-2.5 rounded-xl text-sm font-bold"
-          >
-            Contact Support
-          </a>
+              Contact Support
+            </a>
+          </div>
         </div>
       </div>
-    </div>
-    <Footer/>
-        </>
+      <Footer />
+    </>
   );
 }

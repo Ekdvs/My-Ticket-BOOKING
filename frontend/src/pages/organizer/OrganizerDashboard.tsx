@@ -1,13 +1,13 @@
 import {
   Calendar, LogOut, Menu, User, X, LayoutGrid,
-  Users2, PlusCircle, Home,
+   PlusCircle, Home,
   QrCode,
   Wallet2,
   BarChart3,
   CreditCard,
   Settings
 } from "lucide-react";
-import { cacheSignal, useEffect, useState } from "react";
+import {  useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Axios from "../../utils/Axios";
 import SummaryApi from "../../api/SummaryApi";

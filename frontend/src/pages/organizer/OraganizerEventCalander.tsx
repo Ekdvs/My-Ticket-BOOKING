@@ -10,9 +10,10 @@ import {
   Plus,
   CalendarDays,
   CheckCircle2,
-  XCircle,
+  
   X,
-  Menu,
+  XCircle,
+  
 } from "lucide-react";
 import EventModal from "../components/EventModal";
 import EventFormModal from "../components/EventFormModal";

@@ -1,15 +1,16 @@
 import { useRef } from "react";
 import { ChevronLeft, ChevronRight, ArrowRight } from "lucide-react";
 import EventCard from "./Eventcard";
+import type { AppEvent } from "../../type/type";
 
 
 interface EventSectionProps {
   title: string;
   emoji?: string;
   accentColor?: string;
-  events: Event[];
+  events: AppEvent[];
   loading?: boolean;
-  onEventClick: (e: Event) => void;
+  onEventClick: (e: AppEvent) => void;
   onViewAll?: () => void;
 }
 

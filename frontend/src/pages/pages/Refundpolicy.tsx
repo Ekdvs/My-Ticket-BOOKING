@@ -1,6 +1,15 @@
 import { RefreshCw, Clock, CheckCircle, XCircle, AlertCircle, CreditCard } from "lucide-react";
 
-const refundTiers = [
+type ColorKey = "green" | "yellow" | "red";
+
+const refundTiers: {
+  label: string;
+  condition: string;
+  timeline: string;
+  coverage: string;
+  color: ColorKey;
+  icon: React.ElementType;
+}[] = [
   {
     label: "Full Refund",
     condition: "Event cancelled by organizer",
@@ -35,7 +44,7 @@ const refundTiers = [
   },
 ];
 
-const colorMap = {
+const colorMap: Record<ColorKey, { bg: string; border: string; text: string; badge: string }> = {
   green: {
     bg: "bg-green-500/10",
     border: "border-green-500/20",

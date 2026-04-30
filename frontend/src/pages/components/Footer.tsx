@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { Ticket, Mail, Phone, MapPin, ArrowRight, Heart } from "lucide-react";
+import { Ticket, ArrowRight, Heart } from "lucide-react";
 import { FaFacebook, FaInstagram, FaTwitter, FaYoutube } from "react-icons/fa";
 
 const FOOTER_LINKS = {

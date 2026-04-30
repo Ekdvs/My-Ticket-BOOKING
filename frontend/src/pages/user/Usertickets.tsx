@@ -1,14 +1,11 @@
 import { useEffect, useState } from "react";
 import Axios from "../../utils/Axios";
-import { jsPDF } from "jspdf";
-import html2canvas from "html2canvas";
 import toast from "react-hot-toast";
 import SummaryApi from "../../api/SummaryApi";
 
 const UserTickets = () => {
     const [bookings, setBookings] = useState<any[]>([]);
     const [loading, setLoading] = useState(true);
-    const [downloadingId, setDownloadingId] = useState<string | null>(null);
 
     // ───────── FETCH BOOKINGS ─────────
     useEffect(() => {
@@ -31,37 +28,6 @@ const UserTickets = () => {
 
         fetchTickets();
     }, []);
-
-    // ───────── PDF DOWNLOAD (CUSTOM) ─────────
-    const downloadPDF = async (bookingId: string) => {
-        const element = document.getElementById(`ticket-${bookingId}`);
-        if (!element) return;
-
-        try {
-            setDownloadingId(bookingId);
-
-            const canvas = await html2canvas(element, {
-                scale: 2,
-                useCORS: true,
-            });
-
-            const imgData = canvas.toDataURL("image/png");
-
-            const pdf = new jsPDF("p", "mm", "a4");
-
-            const imgWidth = 210;
-            const imgHeight = (canvas.height * imgWidth) / canvas.width;
-
-            pdf.addImage(imgData, "PNG", 0, 10, imgWidth, imgHeight);
-            pdf.save(`ticket-${bookingId}.pdf`);
-
-            toast.success("Ticket downloaded");
-        } catch {
-            toast.error("Download failed");
-        } finally {
-            setDownloadingId(null);
-        }
-    };
 
     // ───────── STATUS COLOR ─────────
     const getStatusColor = (status: string) => {
@@ -148,7 +114,6 @@ const UserTickets = () => {
                                         {b.ticketStatus}
                                     </span>
                                 </div>
-
 
                             </div>
 

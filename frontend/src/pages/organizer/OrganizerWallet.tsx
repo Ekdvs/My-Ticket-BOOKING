@@ -3,7 +3,7 @@ import Axios from "../../utils/Axios";
 import SummaryApi from "../../api/SummaryApi";
 import {
   Wallet2, TrendingUp, ArrowDownCircle, Coins,
-  RefreshCw, CheckCircle2, Clock, ChevronRight
+  RefreshCw, CheckCircle2, Clock
 } from "lucide-react";
 import {
   PieChart, Pie, Cell, Tooltip,

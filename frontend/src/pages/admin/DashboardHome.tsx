@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import Axios from "../../utils/Axios";
 import SummaryApi from "../../api/SummaryApi";
 import {
-  CalendarDays, Ticket, DollarSign, ScanLine,
+   Ticket,  ScanLine,
   LayoutGrid, PlusCircle, Calendar, Users2,
   TrendingUp, ArrowRight,
   Coins

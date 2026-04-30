@@ -1,10 +1,18 @@
-import React from 'react'
+
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import { ChevronRight } from 'lucide-react';
 
+type TagColor = "orange" | "blue" | "purple" | "green" | "red" | "yellow";
 const Blog = () => {
-    const posts = [
+    const posts: {
+    tag: string;
+    date: string;
+    title: string;
+    excerpt: string;
+    readTime: string;
+    color: TagColor;
+  }[] =  [
   {
     tag: "Event Tips",
     date: "Jan 15, 2025",
@@ -55,7 +63,7 @@ const Blog = () => {
   },
 ];
 
-const tagColors = {
+const tagColors: Record<TagColor, string> = {
   orange: "bg-orange-500/20 text-orange-400",
   blue: "bg-blue-500/20 text-blue-400",
   purple: "bg-purple-500/20 text-purple-400",

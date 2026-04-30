@@ -6,7 +6,6 @@ import SummaryApi from "../../api/SummaryApi";
 import { FaEnvelope, FaLock } from "react-icons/fa";
 import { Eye, EyeOff } from "lucide-react";
 
-
 const ResetPassword = () => {
   const navigate = useNavigate();
   const location = useLocation();
@@ -28,8 +27,8 @@ const ResetPassword = () => {
     }
   }, [emailFromPrev, navigate]);
 
-  const validatePassword = (pwd: String): string | null => {
-    if (pwd.length < 6) return "At least 8 characters required";
+  const validatePassword = (pwd: string): string | null => {
+    if (pwd.length < 6) return "At least 6 characters required";
     if (!/[A-Z]/.test(pwd)) return "One uppercase letter required";
     if (!/[0-9]/.test(pwd)) return "One number required";
     if (!/[!@#$%^&*]/.test(pwd)) return "One special character required";
@@ -76,8 +75,6 @@ const ResetPassword = () => {
   };
 
   return (
-
-    
     <div className="w-full h-screen bg-[url('/bglogin.png')] bg-cover flex items-center justify-center">
 
       {/* LEFT */}
@@ -102,7 +99,6 @@ const ResetPassword = () => {
 
       {/* RIGHT */}
       <div className="w-full lg:w-[50%] h-full flex items-center justify-center bg-purple-600/50">
-
         <div className="w-[90%] max-w-[500px] bg-black/40 backdrop-blur-lg rounded-2xl shadow-2xl p-8 flex flex-col items-center gap-6">
 
           <h1 className="text-3xl text-[#FFD700] font-semibold">
@@ -123,40 +119,40 @@ const ResetPassword = () => {
             </div>
 
             {/* PASSWORD */}
-            <div className="flex items-center gap-3 bg-gray-800 px-4 py-3 rounded-lg text-white focus-within:ring-2 focus-within:ring-[#FFD700]">
+            <div className="relative flex items-center gap-3 bg-gray-800 px-4 py-3 rounded-lg text-white focus-within:ring-2 focus-within:ring-[#FFD700]">
               <FaLock />
               <input
                 type={showPassword ? "text" : "password"}
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="New password"
-                className="bg-transparent flex-1 outline-none"
+                className="bg-transparent flex-1 outline-none pr-8"
               />
               <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
-                className="absolute right-3 top-3 text-gray-400 hover:text-[#FFD700]"
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-[#FFD700]"
               >
                 {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
               </button>
             </div>
 
             {/* CONFIRM PASSWORD */}
-            <div className="flex items-center gap-3 bg-gray-800 px-4 py-3 rounded-lg text-white focus-within:ring-2 focus-within:ring-[#FFD700]">
+            <div className="relative flex items-center gap-3 bg-gray-800 px-4 py-3 rounded-lg text-white focus-within:ring-2 focus-within:ring-[#FFD700]">
               <FaLock />
               <input
                 type={showConfirmPassword ? "text" : "password"}
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
                 placeholder="Confirm password"
-                className="bg-transparent flex-1 outline-none"
+                className="bg-transparent flex-1 outline-none pr-8"
               />
               <button
                 type="button"
                 onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                className="absolute right-3 top-3 text-gray-400 hover:text-[#FFD700]"
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-[#FFD700]"
               >
-                {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+                {showConfirmPassword ? <EyeOff size={20} /> : <Eye size={20} />}
               </button>
             </div>
 
@@ -172,7 +168,7 @@ const ResetPassword = () => {
               {loading ? (
                 <>
                   <span className="w-5 h-5 border-2 border-black border-t-transparent rounded-full animate-spin"></span>
-                  Reseting Password...
+                  Resetting Password...
                 </>
               ) : (
                 "Reset Password"
@@ -182,7 +178,6 @@ const ResetPassword = () => {
         </div>
       </div>
     </div>
-    
   );
 };
 

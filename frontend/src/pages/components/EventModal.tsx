@@ -6,7 +6,7 @@ import ConfirmModal from "./ConfirmModal";
 
 import {
   X, MapPin, Calendar, Edit3,
-  Trash2, Power, Users, CheckCircle2, XCircle, Tag, Ticket,
+  Trash2, Power, CheckCircle2, XCircle, Tag, Ticket,
   Coins
 } from "lucide-react";
 import EventForm from "../admin/EventForm";

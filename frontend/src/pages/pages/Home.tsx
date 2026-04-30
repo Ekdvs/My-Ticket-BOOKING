@@ -10,6 +10,7 @@ import Hero from "../components/Hero";
 import { X, SlidersHorizontal } from "lucide-react";
 import EventCard from "../components/Eventcard";
 import EventSection from "../components/Eventsection";
+import type { AppEvent } from "../../type/type";
 
 const SECTIONS = [
   { cat: "EVENT",   label: "Events",   emoji: "🎵", color: "#f97316" },
@@ -23,7 +24,7 @@ const SECTIONS = [
 
 const HomePage = () => {
   const navigate = useNavigate();
-  const [allEvents, setAllEvents]   = useState([]);
+  const [allEvents, setAllEvents]   = useState<AppEvent[]>([]);
   const [loading, setLoading]       = useState(true);
   const [loadMore, setLoadMore]     = useState(false);
   const [page, setPage]             = useState(0);
@@ -37,7 +38,7 @@ const HomePage = () => {
     try {
       replace ? setLoading(true) : setLoadMore(true);
       const res = await Axios({ ...SummaryApi.get_all_events, params: { page: pg, size: 50 } });
-      let content = [];
+      let content: AppEvent[] = [];
       let pages = 1;
       if (res.data?.data?.content) { content = res.data.data.content; pages = res.data.data.totalPages ?? 1; }
       else if (Array.isArray(res.data?.data)) { content = res.data.data; }
@@ -55,7 +56,7 @@ const HomePage = () => {
     .filter((e) => {
       const matchCat = activeCategory === "ALL" || e.category === activeCategory;
       const q = searchQuery.toLowerCase();
-      const matchQ = !q || e.title.toLowerCase().includes(q) || (e.venue||"").toLowerCase().includes(q) || (e.location||"").toLowerCase().includes(q);
+      const matchQ = !q || e.title.toLowerCase().includes(q) || (e.venue || "").toLowerCase().includes(q) || (e.location || "").toLowerCase().includes(q);
       return matchCat && matchQ;
     })
     .sort((a, b) => {
@@ -64,28 +65,27 @@ const HomePage = () => {
       return new Date(a.eventDateTime).getTime() - new Date(b.eventDateTime).getTime();
     });
 
-  const byCategory = (cat) => allEvents.filter((e) => e.category === cat && e.active);
+  const byCategory = (cat: string) => allEvents.filter((e) => e.category === cat && e.active);
   const featured   = allEvents.filter((e) => e.active).slice(0, 10);
   const isFiltered = Boolean(searchQuery) || activeCategory !== "ALL";
 
-  const handleEventClick = (event) => navigate(`/event/${event.id}`);
-  const handleSearch = (q) => { setSearchQuery(q); if (q) setActiveCategory("ALL"); window.scrollTo({ top: 220, behavior: "smooth" }); };
+  const handleEventClick = (event: AppEvent) => navigate(`/event/${event.id}`);
+  const handleSearch = (q: string) => { setSearchQuery(q); if (q) setActiveCategory("ALL"); window.scrollTo({ top: 220, behavior: "smooth" }); };
 
   return (
     <div className="min-h-screen bg-[#f8f8fa]">
       <Navbar
-  activeCategory={activeCategory}
-  onCategory={(key, sub) => {
-    setActiveCategory(key);
-
-    if (sub) {
-      setSearchQuery(sub); // 🔥 subcategory triggers search
-    } else {
-      setSearchQuery("");
-    }
-  }}
-  onSearch={handleSearch}
-/>
+        activeCategory={activeCategory}
+        onCategory={(key: string, sub?: string) => {
+          setActiveCategory(key);
+          if (sub) {
+            setSearchQuery(sub);
+          } else {
+            setSearchQuery("");
+          }
+        }}
+        onSearch={handleSearch}
+      />
       <main className="max-w-7xl mx-auto px-0 sm:px-4 pb-10">
         {!isFiltered && <Hero onSearch={handleSearch} />}
         {isFiltered && (
@@ -96,19 +96,33 @@ const HomePage = () => {
               </h2>
               <span className="bg-orange-100 text-orange-600 text-xs font-bold px-2.5 py-0.5 rounded-full">{filtered.length}</span>
               <div className="relative ml-auto">
-                <button onClick={() => setSortOpen(!sortOpen)} className="flex items-center gap-1.5 px-3 py-2 bg-white border border-gray-200 text-xs font-semibold text-gray-600 rounded-xl hover:border-gray-300 shadow-sm transition-all">
+                <button
+                  onClick={() => setSortOpen(!sortOpen)}
+                  className="flex items-center gap-1.5 px-3 py-2 bg-white border border-gray-200 text-xs font-semibold text-gray-600 rounded-xl hover:border-gray-300 shadow-sm transition-all"
+                >
                   <SlidersHorizontal size={13} />
                   {sort === "date" ? "Date" : sort === "price_asc" ? "Price ↑" : "Price ↓"}
                 </button>
                 {sortOpen && (
                   <div className="absolute right-0 top-full mt-1.5 w-40 bg-white border border-gray-100 rounded-2xl shadow-xl z-20 py-1.5">
-                    {[["date","By Date"],["price_asc","Price: Low→High"],["price_desc","Price: High→Low"]].map(([v, l]) => (
-                      <button key={v} onClick={() => { setSort(v); setSortOpen(false); }} className={`w-full text-left px-4 py-2 text-xs font-medium transition-colors ${sort === v ? "text-orange-600 bg-orange-50" : "text-gray-600 hover:bg-gray-50"}`}>{l}</button>
+                    {([ ["date","By Date"], ["price_asc","Price: Low→High"], ["price_desc","Price: High→Low"] ] as [string, string][]).map(([v, l]) => (
+                      <button
+                        key={v}
+                        onClick={() => { setSort(v); setSortOpen(false); }}
+                        className={`w-full text-left px-4 py-2 text-xs font-medium transition-colors ${sort === v ? "text-orange-600 bg-orange-50" : "text-gray-600 hover:bg-gray-50"}`}
+                      >
+                        {l}
+                      </button>
                     ))}
                   </div>
                 )}
               </div>
-              <button onClick={() => { setSearchQuery(""); setActiveCategory("ALL"); }} className="flex items-center gap-1 text-xs text-gray-400 hover:text-red-500 transition-colors"><X size={13} /> Clear</button>
+              <button
+                onClick={() => { setSearchQuery(""); setActiveCategory("ALL"); }}
+                className="flex items-center gap-1 text-xs text-gray-400 hover:text-red-500 transition-colors"
+              >
+                <X size={13} /> Clear
+              </button>
             </div>
             {loading ? (
               <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3.5">
@@ -139,7 +153,11 @@ const HomePage = () => {
             ))}
             {page < totalPages - 1 && (
               <div className="flex justify-center mt-4 mb-6">
-                <button onClick={() => fetchEvents(page + 1, false)} disabled={loadMore} className="px-8 py-3 border-2 border-orange-500 text-orange-500 font-bold text-sm rounded-2xl hover:bg-orange-500 hover:text-white transition-all disabled:opacity-50">
+                <button
+                  onClick={() => fetchEvents(page + 1, false)}
+                  disabled={loadMore}
+                  className="px-8 py-3 border-2 border-orange-500 text-orange-500 font-bold text-sm rounded-2xl hover:bg-orange-500 hover:text-white transition-all disabled:opacity-50"
+                >
                   {loadMore ? "Loading…" : "Load More Events"}
                 </button>
               </div>

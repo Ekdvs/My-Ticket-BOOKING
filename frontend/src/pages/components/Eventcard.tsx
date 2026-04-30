@@ -1,20 +1,7 @@
-import { Calendar, MapPin, Tag } from "lucide-react";
+import { Calendar, MapPin } from "lucide-react";
+import type { AppEvent } from "../../type/type";
 
-export interface Event {
-  id: string;
-  title: string;
-  category: string;
-  subCategory: string;
-  location: string;
-  venue: string;
-  eventDateTime: string;
-  price: number;
-  totalTickets: number;
-  availableTickets: number;
-  imageUrls: string[];
-  active: boolean;
-  organizerId: string;
-}
+
 
 const PLACEHOLDER = "https://images.unsplash.com/photo-1492684223066-81342ee5ff30?w=600&q=80";
 
@@ -38,7 +25,7 @@ const CAT_COLORS: Record<string, string> = {
 };
 
 interface EventCardProps {
-  event: Event;
+  event: AppEvent;
   onClick: () => void;
   size?: "sm" | "md";
 }
