@@ -5,6 +5,8 @@ import Axios from "../../utils/Axios";
 import SummaryApi from "../../api/SummaryApi";
 import { FaEnvelope, FaLock } from "react-icons/fa";
 import { Eye, EyeOff } from "lucide-react";
+import Navbar from "../components/Navbar";
+import Footer from "../components/Footer";
 
 const ResetPassword = () => {
   const navigate = useNavigate();
@@ -75,6 +77,7 @@ const ResetPassword = () => {
   };
 
   return (
+    <><Navbar />
     <div className="w-full h-screen bg-[url('/bglogin.png')] bg-cover flex items-center justify-center">
 
       {/* LEFT */}
@@ -178,6 +181,8 @@ const ResetPassword = () => {
         </div>
       </div>
     </div>
+    <Footer/>
+    </>
   );
 };
 
