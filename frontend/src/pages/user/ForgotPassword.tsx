@@ -86,6 +86,8 @@ const ForgotPassword: React.FC = () => {
         </button>
       </div>
 
+      
+
       {/* RIGHT SECTION */}
       <div className="w-full lg:w-[50%] h-full bg-purple-600/50 flex items-center justify-center">
         
