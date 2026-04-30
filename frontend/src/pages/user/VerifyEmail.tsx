@@ -5,7 +5,7 @@ import Axios from "../../utils/Axios";
 import SummaryApi from "../../api/SummaryApi";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
-import { CheckCircle, XCircle, Loader2, Mail, ArrowRight } from "lucide-react";
+import { CheckCircle, XCircle, Mail, ArrowRight } from "lucide-react";
 
 type Status = "loading" | "success" | "error";
 
