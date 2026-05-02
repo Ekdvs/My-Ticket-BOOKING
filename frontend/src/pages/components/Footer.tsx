@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { ArrowRight,  ChevronDown } from "lucide-react";
+import { ArrowRight, ChevronDown } from "lucide-react";
 import { FaFacebook, FaInstagram, FaTwitter, FaYoutube } from "react-icons/fa";
 
 // ✅ TYPES
@@ -70,16 +70,14 @@ function AccordionSection({ heading, links }: AccordionSectionProps) {
         </span>
         <ChevronDown
           size={16}
-          className={`text-orange-400 transition-transform duration-300 md:hidden ${
-            open ? "rotate-180" : ""
-          }`}
+          className={`text-orange-400 transition-transform duration-300 md:hidden ${open ? "rotate-180" : ""
+            }`}
         />
       </button>
 
       <div
-        className={`overflow-hidden transition-all duration-300 ease-in-out md:!max-h-none md:overflow-visible ${
-          open ? "max-h-96" : "max-h-0"
-        }`}
+        className={`overflow-hidden transition-all duration-300 ease-in-out md:!max-h-none md:overflow-visible ${open ? "max-h-96" : "max-h-0"
+          }`}
       >
         <ul className="grid grid-cols-2 gap-x-3 gap-y-3 px-5 pb-4 md:px-0 md:pb-0 md:grid-cols-1 md:gap-y-2.5">
           {links.map((link: FooterLink) => (
@@ -184,7 +182,14 @@ export default function Footer() {
               </a>
             ))}
           </div>
+
         </div>
+        <p className="text-center text-sm text-gray-500 ">
+          &copy; {new Date().getFullYear()} Ticket Booking. All rights reserved.
+        </p>
+        <p className="text-center text-xs text-gray-400 mb-6 tracking-wide">
+          Built with ❤️ by ekdvs
+        </p>
       </div>
     </footer>
   );
