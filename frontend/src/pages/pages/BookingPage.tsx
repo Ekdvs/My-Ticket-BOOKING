@@ -49,7 +49,7 @@ export default function BookingPage() {
   }, [id]);
 
   const handleBooking = async () => {
-  const token = localStorage.getItem("token");
+  const token = localStorage.getItem("accessToken");
 
   // 🔥 NOT LOGGED IN → SAVE REDIRECT + GO LOGIN
   if (!token) {

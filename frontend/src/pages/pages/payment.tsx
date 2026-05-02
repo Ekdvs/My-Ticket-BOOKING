@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { use, useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import Axios from "../../utils/Axios";
 import SummaryApi from "../../api/SummaryApi";
 import { toast } from "react-hot-toast";
@@ -24,14 +24,32 @@ const PAYHERE_URL = "https://sandbox.payhere.lk/pay/checkout";
 export default function PaymentPage() {
   const { bookingId } = useParams();
 
-  const [loading,     setLoading]     = useState(true);
-  const [paying,      setPaying]      = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [paying, setPaying] = useState(false);
   const [paymentData, setPaymentData] = useState<Record<string, string> | null>(null);
+  const Navigate = useNavigate();
 
   useEffect(() => {
     if (!bookingId) return;
 
     const loadPayment = async () => {
+
+      const token = localStorage.getItem("accessToken");
+
+      // 🔥 NOT LOGGED IN → SAVE REDIRECT + GO LOGIN
+      if (!token) {
+        sessionStorage.setItem(
+          "redirectAfterLogin",
+          JSON.stringify({
+            path: `/payment/${bookingId}`,
+
+          })
+        );
+
+        toast.error("Please login to continue");
+        Navigate("/login");
+        return;
+      }
       try {
         const res = await Axios({
           method: SummaryApi.createPayment.method,
@@ -55,7 +73,7 @@ export default function PaymentPage() {
     }
 
     const required = ["merchant_id", "order_id", "amount", "currency", "hash"];
-    const missing  = required.filter((k) => !paymentData[k]);
+    const missing = required.filter((k) => !paymentData[k]);
     if (missing.length > 0) {
       toast.error(`Payment setup error — missing: ${missing.join(", ")}`);
       return;
@@ -63,16 +81,16 @@ export default function PaymentPage() {
 
     setPaying(true);
 
-    const form  = document.createElement("form");
+    const form = document.createElement("form");
     form.method = "POST";
     form.action = PAYHERE_URL;
 
     Object.entries(paymentData).forEach(([key, value]) => {
       if (value == null) return;
-      const input  = document.createElement("input");
-      input.type   = "hidden";
-      input.name   = key;
-      input.value  = String(value);
+      const input = document.createElement("input");
+      input.type = "hidden";
+      input.name = key;
+      input.value = String(value);
       form.appendChild(input);
     });
 
@@ -132,12 +150,12 @@ export default function PaymentPage() {
     );
   }
 
-  const amount   = parseFloat(paymentData.amount || "0");
+  const amount = parseFloat(paymentData.amount || "0");
   const currency = paymentData.currency || "LKR";
 
   return (
     <>
-      
+
 
       <Navbar />
 
@@ -170,9 +188,9 @@ export default function PaymentPage() {
             {/* SSL indicators */}
             <div className="flex flex-wrap gap-3 mt-5">
               {[
-                { icon: <FiShield className="text-green-300" />,   label: "SSL Encrypted" },
+                { icon: <FiShield className="text-green-300" />, label: "SSL Encrypted" },
                 { icon: <FiCheckCircle className="text-green-300" />, label: "PCI Compliant" },
-                { icon: <FiLock className="text-green-300" />,      label: "Central Bank Approved" },
+                { icon: <FiLock className="text-green-300" />, label: "Central Bank Approved" },
               ].map(({ icon, label }) => (
                 <div key={label} className="flex items-center gap-1.5 bg-white/10 rounded-lg px-3 py-1.5 text-xs font-medium text-white/90 backdrop-blur-sm">
                   {icon} {label}
@@ -229,9 +247,9 @@ export default function PaymentPage() {
             <h3 className="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-4">What happens next?</h3>
             <div className="space-y-3">
               {[
-                { step: "1", title: "Click Pay Now",          desc: "You'll be securely redirected to PayHere",             color: "bg-blue-100 text-blue-700" },
-                { step: "2", title: "Complete Payment",        desc: "Enter your card or use mobile payment options",        color: "bg-indigo-100 text-indigo-700" },
-                { step: "3", title: "Instant Confirmation",    desc: "Your ticket booking is confirmed immediately",          color: "bg-green-100 text-green-700" },
+                { step: "1", title: "Click Pay Now", desc: "You'll be securely redirected to PayHere", color: "bg-blue-100 text-blue-700" },
+                { step: "2", title: "Complete Payment", desc: "Enter your card or use mobile payment options", color: "bg-indigo-100 text-indigo-700" },
+                { step: "3", title: "Instant Confirmation", desc: "Your ticket booking is confirmed immediately", color: "bg-green-100 text-green-700" },
               ].map(({ step, title, desc, color }) => (
                 <div key={step} className="flex items-start gap-3">
                   <span className={`w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0 mt-0.5 ${color}`}>
@@ -250,11 +268,10 @@ export default function PaymentPage() {
           <button
             onClick={startPayment}
             disabled={paying}
-            className={`w-full flex items-center justify-center gap-3 py-4 rounded-2xl text-base font-bold transition-all duration-200 shadow-lg ${
-              paying
+            className={`w-full flex items-center justify-center gap-3 py-4 rounded-2xl text-base font-bold transition-all duration-200 shadow-lg ${paying
                 ? "bg-gray-100 text-gray-400 cursor-not-allowed shadow-none"
                 : "bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white shadow-blue-200 hover:shadow-blue-300 hover:-translate-y-0.5 active:translate-y-0"
-            }`}
+              }`}
           >
             {paying ? (
               <>
