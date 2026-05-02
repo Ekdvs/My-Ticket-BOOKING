@@ -137,6 +137,8 @@ const Register: React.FC = () => {
                 withCredentials: true,
             });
 
+            console.log("Registration response:", res);
+
             if (res.data.success) {
                 toast.success(res.data.message);
                 navigate("/login");
