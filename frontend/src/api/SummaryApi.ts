@@ -76,8 +76,21 @@ mark_notification_read: (id: string) => ({ url: `/notifications/read/${id}`, met
 get_my_tickets:{
   url:"/bookings/my-tickets",
   method:"get"
-}
+},
+geteventbyid:(id:string)=>({
+  url:`/event/getById/${id}`,
+  method:"get"
+}),
+createBooking:{
+  url:"/bookings/create",
+  method:"post"},
+  createPayment:{
+    url:"/payments/create",
+    method:"post"
+  }
 };
+
+
 
 
 export default SummaryApi;
