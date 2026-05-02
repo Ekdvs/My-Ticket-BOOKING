@@ -1,19 +1,29 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { Ticket, ArrowRight, Heart } from "lucide-react";
+import { ArrowRight,  ChevronDown } from "lucide-react";
 import { FaFacebook, FaInstagram, FaTwitter, FaYoutube } from "react-icons/fa";
 
-const FOOTER_LINKS = {
-  Explore: [
-    { label: "Events", path: "/events?category=EVENT" },
-    { label: "Movies", path: "/events?category=MOVIE" },
-    { label: "Theatre", path: "/events?category=THEATRE" },
-    { label: "Sports", path: "/events?category=SPORT" },
-    { label: "Holidays", path: "/events?category=HOLIDAY" },
-    { label: "Foods", path: "/events?category=FOOD" },
-    { label: "Deals", path: "/deals" },
-  ],
+// ✅ TYPES
+type FooterLink = {
+  label: string;
+  path: string;
+};
 
+type AccordionSectionProps = {
+  heading: string;
+  links: FooterLink[];
+};
+
+const FOOTER_LINKS: Record<string, FooterLink[]> = {
+  Explore: [
+    { label: "Events", path: "/" },
+    { label: "Movies", path: "/" },
+    { label: "Theatre", path: "/" },
+    { label: "Sports", path: "/" },
+    { label: "Holidays", path: "/" },
+    { label: "Foods", path: "/" },
+    { label: "Deals", path: "/" },
+  ],
   Account: [
     { label: "My Tickets", path: "/dashboard" },
     { label: "My Account", path: "/dashboard" },
@@ -21,7 +31,6 @@ const FOOTER_LINKS = {
     { label: "Refund Policy", path: "/dashboard" },
     { label: "Gift Cards", path: "/dashboard" },
   ],
-
   Company: [
     { label: "About Us", path: "/about" },
     { label: "Who We Are", path: "/about#team" },
@@ -29,7 +38,6 @@ const FOOTER_LINKS = {
     { label: "Blog", path: "/blog" },
     { label: "Press Kit", path: "/press" },
   ],
-
   Support: [
     { label: "FAQ", path: "/faq" },
     { label: "Contact Us", path: "/contact" },
@@ -46,6 +54,53 @@ const SOCIALS = [
   { icon: FaYoutube, href: "https://youtube.com", label: "YouTube" },
 ];
 
+// ✅ FIXED TYPES HERE
+function AccordionSection({ heading, links }: AccordionSectionProps) {
+  const [open, setOpen] = useState(false);
+
+  return (
+    <div className="border-b border-white/5 md:border-none">
+      <button
+        className="w-full flex items-center justify-between px-5 py-4 md:px-0 md:pb-3 md:pt-0 md:cursor-default"
+        onClick={() => setOpen((o) => !o)}
+        aria-expanded={open}
+      >
+        <span className="text-[11px] font-bold uppercase tracking-[0.18em] text-gray-400">
+          {heading}
+        </span>
+        <ChevronDown
+          size={16}
+          className={`text-orange-400 transition-transform duration-300 md:hidden ${
+            open ? "rotate-180" : ""
+          }`}
+        />
+      </button>
+
+      <div
+        className={`overflow-hidden transition-all duration-300 ease-in-out md:!max-h-none md:overflow-visible ${
+          open ? "max-h-96" : "max-h-0"
+        }`}
+      >
+        <ul className="grid grid-cols-2 gap-x-3 gap-y-3 px-5 pb-4 md:px-0 md:pb-0 md:grid-cols-1 md:gap-y-2.5">
+          {links.map((link: FooterLink) => (
+            <li key={link.label}>
+              <Link
+                to={link.path}
+                className="text-sm text-gray-400 hover:text-orange-400 flex items-center gap-1.5 group transition-colors"
+              >
+                <span className="w-0 group-hover:w-3 overflow-hidden transition-all text-orange-400 text-base leading-none">
+                  ›
+                </span>
+                {link.label}
+              </Link>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </div>
+  );
+}
+
 export default function Footer() {
   const [email, setEmail] = useState("");
   const [subscribed, setSubscribed] = useState(false);
@@ -59,41 +114,43 @@ export default function Footer() {
 
   return (
     <footer className="bg-gray-950 text-gray-300 relative overflow-hidden">
-      {/* Background effects */}
-      <div className="absolute top-0 left-0 w-96 h-64 bg-orange-600/5 rounded-full blur-3xl" />
-      <div className="absolute bottom-0 right-0 w-80 h-80 bg-red-600/5 rounded-full blur-3xl" />
+      <div className="absolute top-0 left-0 w-72 h-56 bg-orange-600/5 rounded-full blur-3xl pointer-events-none" />
+      <div className="absolute bottom-0 right-0 w-64 h-64 bg-red-600/5 rounded-full blur-3xl pointer-events-none" />
 
-      {/* Newsletter */}
-      <div className="relative border-b border-white/5">
-        <div className="max-w-7xl mx-auto px-4 py-10 flex flex-col sm:flex-row justify-between gap-6">
-          <div>
-            <p className="text-[11px] font-bold text-orange-400 uppercase tracking-[0.2em]">
-              Stay in the Loop
+      <div className="relative border-b border-white/5 bg-gradient-to-r from-orange-950/30 to-red-950/20">
+        <div className="max-w-7xl mx-auto px-5 py-8 sm:flex sm:items-center sm:justify-between sm:gap-8">
+          <div className="mb-5 sm:mb-0">
+            <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-orange-400 mb-1">
+              Stay in the loop
             </p>
-            <h3 className="text-xl font-black text-white">Never miss an event</h3>
-            <p className="text-sm text-gray-500">
-              Get early bird deals and exclusive offers.
+            <h3 className="text-xl font-black text-white leading-tight">
+              Never miss an event
+            </h3>
+            <p className="text-sm text-gray-500 mt-0.5">
+              Early bird deals &amp; exclusive offers.
             </p>
           </div>
 
-          <div className="flex gap-2">
+          <div className="flex gap-2 sm:shrink-0">
             {subscribed ? (
-              <div className="px-4 py-2 bg-green-500/20 border border-green-500/30 rounded-xl text-green-400 text-sm">
-                ✓ Subscribed!
+              <div className="flex-1 sm:flex-none px-4 py-2.5 bg-green-500/15 border border-green-500/30 rounded-xl text-green-400 text-sm font-medium text-center">
+                ✓ You're subscribed!
               </div>
             ) : (
               <>
                 <input
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
+                  onKeyDown={(e) => e.key === "Enter" && handleSubscribe()}
                   placeholder="your@email.com"
-                  className="bg-white/5 border border-white/10 px-4 py-2 rounded-xl text-sm text-white"
+                  className="flex-1 min-w-0 bg-white/5 border border-white/10 focus:border-orange-500/40 focus:outline-none px-4 py-2.5 rounded-xl text-sm text-white placeholder-gray-600 transition-colors"
                 />
                 <button
                   onClick={handleSubscribe}
-                  className="bg-gradient-to-r from-orange-500 to-red-500 px-4 py-2 rounded-xl text-sm font-bold flex items-center gap-1"
+                  className="shrink-0 bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-400 hover:to-red-400 px-4 py-2.5 rounded-xl text-sm font-bold text-white flex items-center gap-1.5 transition-all active:scale-95"
                 >
-                  Subscribe <ArrowRight size={14} />
+                  Subscribe
+                  <ArrowRight size={14} />
                 </button>
               </>
             )}
@@ -101,78 +158,32 @@ export default function Footer() {
         </div>
       </div>
 
-      {/* MAIN LINKS */}
-      <div className="max-w-7xl mx-auto px-4 py-14">
-        <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 gap-10">
-
+      <div className="max-w-7xl mx-auto">
+        <div className="md:px-5 md:py-14 md:grid md:grid-cols-4 md:gap-10">
           {Object.entries(FOOTER_LINKS).map(([heading, links]) => (
-            <div key={heading}>
-              <h3 className="text-[11px] font-bold uppercase tracking-[0.2em] text-gray-400 mb-4">
-                {heading}
-              </h3>
-
-              <ul className="space-y-3">
-                {links.map((link) => (
-                  <li key={link.label}>
-                    <Link
-                      to={link.path}
-                      className="text-sm text-gray-400 hover:text-orange-400 flex items-center gap-2 group"
-                    >
-                      <span className="w-0 group-hover:w-3 overflow-hidden transition-all text-orange-400">
-                        ›
-                      </span>
-                      {link.label}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </div>
+            <AccordionSection
+              key={heading}
+              heading={heading}
+              links={links}
+            />
           ))}
         </div>
 
-        {/* BRAND + SOCIAL */}
-        <div className="mt-12 flex flex-col md:flex-row justify-between items-start gap-6 border-t border-white/5 pt-8">
-          <div>
-            <div className="flex items-center gap-2">
-              <Ticket className="text-white" />
-              <span className="font-bold text-white">MyTickets</span>
-            </div>
-            <p className="text-xs text-gray-500 mt-2">
-              Sri Lanka’s trusted ticket platform.
-            </p>
-          </div>
-
-          <div className="flex gap-3">
-            {SOCIALS.map(({ icon: Icon, label }) => (
+        <div className="px-5 py-7 md:py-0 md:pb-10 flex flex-col gap-5 md:flex-row md:items-center md:justify-between border-t border-white/5">
+          <div className="flex flex-wrap gap-2">
+            {SOCIALS.map(({ icon: Icon, href, label }) => (
               <a
                 key={label}
-                href={label === "Facebook" ? "https://facebook.com" : label === "Instagram" ? "https://instagram.com" : label === "Twitter" ? "https://twitter.com" : "https://youtube.com"}
+                href={href}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-9 h-9 bg-white/5 rounded-xl flex items-center justify-center hover:bg-white/10"
+                className="flex items-center gap-2 bg-white/5 hover:bg-white/10 border border-white/5 hover:border-white/10 px-3 py-2 rounded-xl text-xs font-semibold text-gray-400 hover:text-white transition-all"
               >
-                <Icon size={16} />
+                <Icon size={14} />
+                <span>{label}</span>
               </a>
             ))}
           </div>
-        </div>
-
-        {/* BOTTOM BAR */}
-        <div className="mt-10 border-t border-gray-800 pt-6 flex flex-col md:flex-row justify-between gap-3">
-          <p className="text-xs text-gray-500">
-            © {new Date().getFullYear()}{" "}
-            <span className="text-orange-400 font-semibold">MyTickets</span>. All rights reserved.
-          </p>
-
-          <div className="flex gap-4 text-xs text-gray-500">
-            <Link to="/privacy" className="hover:text-orange-400">Privacy</Link>
-            <Link to="/terms" className="hover:text-orange-400">Terms</Link>
-            <Link to="/cookies" className="hover:text-orange-400">Cookies</Link>
-          </div>
-
-          <p className="text-xs text-gray-600 flex items-center gap-1">
-            Made with <Heart size={11} className="text-red-500 fill-red-500" /> in Sri Lanka
-          </p>
         </div>
       </div>
     </footer>

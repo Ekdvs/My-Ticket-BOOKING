@@ -37,6 +37,8 @@ import EventDetailsPage from "../pages/pages/EventDetailsPage";
 import BookingPage from "../pages/pages/BookingPage";
 import PaymentPage from "../pages/pages/payment";
 import SuccessPage from "../pages/pages/SuccessPage";
+import CancelPage from "../pages/pages/Cancelpage";
+import NotFound from "../pages/pages/NotFound";
 
 
 
@@ -86,7 +88,9 @@ const router = createBrowserRouter([
      { path: "/event/:id", element: <EventDetailsPage /> },
      {path:"/booking/:id", element: <BookingPage />},
      {path:"/payment/:bookingId", element: <PaymentPage />},
-     {path:"/success", element: <SuccessPage />}
+     {path:"/success", element: <SuccessPage />},
+     {path:"/cancel", element: <CancelPage />},
+     {path:"*", element: <NotFound/>}
       
     ],
   },

@@ -1,20 +1,23 @@
 import { useSearchParams, useNavigate } from "react-router-dom";
+import Navbar from "../components/Navbar";
+import Footer from "../components/Footer";
 
-export default function SuccessPage() {
+export default function CancelPage() {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
 
   const orderId = searchParams.get("order_id");
 
   return (
+    <><Navbar/>
     <div className="min-h-screen flex items-center justify-center bg-gray-100 p-4">
       <div className="bg-white w-full max-w-md rounded-2xl shadow-lg p-8 text-center space-y-6">
 
-        {/* Animated checkmark */}
+        {/* Icon */}
         <div className="flex items-center justify-center">
-          <div className="w-20 h-20 rounded-full bg-green-100 flex items-center justify-center">
+          <div className="w-20 h-20 rounded-full bg-red-100 flex items-center justify-center">
             <svg
-              className="w-10 h-10 text-green-500"
+              className="w-10 h-10 text-red-500"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
@@ -23,7 +26,7 @@ export default function SuccessPage() {
                 strokeLinecap="round"
                 strokeLinejoin="round"
                 strokeWidth={2.5}
-                d="M5 13l4 4L19 7"
+                d="M6 18L18 6M6 6l12 12"
               />
             </svg>
           </div>
@@ -31,13 +34,14 @@ export default function SuccessPage() {
 
         {/* Title */}
         <div className="space-y-2">
-          <h1 className="text-2xl font-bold text-gray-800">Payment Successful!</h1>
+          <h1 className="text-2xl font-bold text-gray-800">Payment Cancelled</h1>
           <p className="text-gray-500 text-sm">
-            Your booking has been confirmed. A ticket will be sent to your email shortly.
+            Your payment was cancelled. No charges have been made.
+            You can try again whenever you're ready.
           </p>
         </div>
 
-        {/* Order ID */}
+        {/* Order ID if present */}
         {orderId && (
           <div className="bg-gray-50 border border-gray-100 rounded-xl p-4 text-left space-y-1">
             <p className="text-xs text-gray-400 uppercase tracking-wide">Order ID</p>
@@ -48,29 +52,31 @@ export default function SuccessPage() {
         {/* Actions */}
         <div className="flex flex-col gap-3">
           <button
-            onClick={() => navigate("/")}
+            onClick={() => navigate(-1)}
             className="w-full bg-blue-600 text-white py-3 rounded-xl font-semibold
                        hover:bg-blue-700 active:scale-95 transition-all"
           >
-            Back to Home
+            Try Again
           </button>
           <button
-            onClick={() => navigate("/dashboard")}
+            onClick={() => navigate("/")}
             className="w-full bg-gray-100 text-gray-700 py-3 rounded-xl font-semibold
                        hover:bg-gray-200 active:scale-95 transition-all"
           >
-            View My Bookings
+            Back to Home
           </button>
         </div>
 
         <p className="text-xs text-gray-400">
-          Powered by{" "}
-          <a href="https://www.payhere.lk" target="_blank" rel="noreferrer" className="underline">
-            PayHere
-          </a>{" "}
-          — Central Bank approved secure gateway
+          Need help?{" "}
+          <a href="mailto:support@ekdvs.xyz" className="underline">
+            Contact support
+          </a>
         </p>
+
       </div>
     </div>
+    <Footer/>
+    </>
   );
 }

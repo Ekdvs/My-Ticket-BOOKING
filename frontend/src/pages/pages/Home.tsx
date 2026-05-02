@@ -1,5 +1,5 @@
 import { useEffect, useState, useCallback } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import Axios from "../../utils/Axios";
 import SummaryApi from "../../api/SummaryApi";
 
@@ -24,15 +24,36 @@ const SECTIONS = [
 
 const HomePage = () => {
   const navigate = useNavigate();
+
+  // ── Read ?category=XXX from the URL (set by footer/navbar links) ──
+  const [searchParams] = useSearchParams();
+
   const [allEvents, setAllEvents]   = useState<AppEvent[]>([]);
   const [loading, setLoading]       = useState(true);
   const [loadMore, setLoadMore]     = useState(false);
   const [page, setPage]             = useState(0);
   const [totalPages, setTotalPages] = useState(1);
-  const [activeCategory, setActiveCategory] = useState("ALL");
-  const [searchQuery, setSearchQuery]       = useState("");
-  const [sortOpen, setSortOpen]             = useState(false);
-  const [sort, setSort]                     = useState("date");
+
+  // Initialise activeCategory from URL param so footer links work on first load
+  const [activeCategory, setActiveCategory] = useState(
+    searchParams.get("category") ?? "ALL"
+  );
+  const [searchQuery, setSearchQuery] = useState("");
+  const [sortOpen, setSortOpen]       = useState(false);
+  const [sort, setSort]               = useState("date");
+
+  // ── Sync state whenever the URL ?category param changes ──
+  // This fires when the user clicks a footer link like /events?category=MOVIE
+  useEffect(() => {
+    const cat = searchParams.get("category");
+    if (cat) {
+      setActiveCategory(cat);
+      setSearchQuery("");           // clear any active search
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    } else {
+      setActiveCategory("ALL");
+    }
+  }, [searchParams]);
 
   const fetchEvents = useCallback(async (pg = 0, replace = true) => {
     try {
@@ -70,20 +91,43 @@ const HomePage = () => {
   const isFiltered = Boolean(searchQuery) || activeCategory !== "ALL";
 
   const handleEventClick = (event: AppEvent) => navigate(`/event/${event.id}`);
-  const handleSearch = (q: string) => { setSearchQuery(q); if (q) setActiveCategory("ALL"); window.scrollTo({ top: 220, behavior: "smooth" }); };
+
+  const handleSearch = (q: string) => {
+    setSearchQuery(q);
+    if (q) setActiveCategory("ALL");
+    window.scrollTo({ top: 220, behavior: "smooth" });
+  };
+
+  // ── Navbar category click: update state AND push ?category= to URL ──
+  // This keeps the URL in sync so sharing/bookmarking works too
+  const handleNavCategory = (key: string, sub?: string) => {
+    setActiveCategory(key);
+    if (sub) {
+      setSearchQuery(sub);
+    } else {
+      setSearchQuery("");
+    }
+
+    // Update URL to match selected category (without full page reload)
+    if (key !== "ALL") {
+      navigate(`/events?category=${key}`, { replace: true });
+    } else {
+      navigate("/events", { replace: true });
+    }
+  };
+
+  // ── Clear filter: also clear the URL param ──
+  const handleClear = () => {
+    setSearchQuery("");
+    setActiveCategory("ALL");
+    navigate("/events", { replace: true });
+  };
 
   return (
     <div className="min-h-screen bg-[#f8f8fa]">
       <Navbar
         activeCategory={activeCategory}
-        onCategory={(key: string, sub?: string) => {
-          setActiveCategory(key);
-          if (sub) {
-            setSearchQuery(sub);
-          } else {
-            setSearchQuery("");
-          }
-        }}
+        onCategory={handleNavCategory}
         onSearch={handleSearch}
       />
       <main className="max-w-7xl mx-auto px-0 sm:px-4 pb-10">
@@ -92,9 +136,15 @@ const HomePage = () => {
           <div className="px-4 sm:px-0 pt-6">
             <div className="flex items-center gap-3 mb-5 flex-wrap">
               <h2 className="text-base sm:text-lg font-extrabold text-gray-900">
-                {searchQuery ? `Results for "${searchQuery}"` : SECTIONS.find((s) => s.cat === activeCategory)?.label ?? "Events"}
+                {searchQuery
+                  ? `Results for "${searchQuery}"`
+                  : SECTIONS.find((s) => s.cat === activeCategory)?.label ?? "Events"}
               </h2>
-              <span className="bg-orange-100 text-orange-600 text-xs font-bold px-2.5 py-0.5 rounded-full">{filtered.length}</span>
+              <span className="bg-orange-100 text-orange-600 text-xs font-bold px-2.5 py-0.5 rounded-full">
+                {filtered.length}
+              </span>
+
+              {/* Sort dropdown */}
               <div className="relative ml-auto">
                 <button
                   onClick={() => setSortOpen(!sortOpen)}
@@ -117,13 +167,16 @@ const HomePage = () => {
                   </div>
                 )}
               </div>
+
+              {/* Clear button */}
               <button
-                onClick={() => { setSearchQuery(""); setActiveCategory("ALL"); }}
+                onClick={handleClear}
                 className="flex items-center gap-1 text-xs text-gray-400 hover:text-red-500 transition-colors"
               >
                 <X size={13} /> Clear
               </button>
             </div>
+
             {loading ? (
               <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3.5">
                 {[...Array(10)].map((_, i) => <div key={i} className="h-72 rounded-2xl bg-gray-100 animate-pulse" />)}
@@ -145,11 +198,24 @@ const HomePage = () => {
             )}
           </div>
         )}
+
         {!isFiltered && (
           <div className="pt-2">
             <EventSection title="Featured Events" emoji="✨" accentColor="#f97316" events={featured} loading={loading} onEventClick={handleEventClick} />
             {SECTIONS.map(({ cat, label, emoji, color }) => (
-              <EventSection key={cat} title={label} emoji={emoji} accentColor={color} events={byCategory(cat)} loading={loading} onEventClick={handleEventClick} onViewAll={() => setActiveCategory(cat)} />
+              <EventSection
+                key={cat}
+                title={label}
+                emoji={emoji}
+                accentColor={color}
+                events={byCategory(cat)}
+                loading={loading}
+                onEventClick={handleEventClick}
+                onViewAll={() => {
+                  setActiveCategory(cat);
+                  navigate(`/events?category=${cat}`, { replace: true });
+                }}
+              />
             ))}
             {page < totalPages - 1 && (
               <div className="flex justify-center mt-4 mb-6">
@@ -167,7 +233,6 @@ const HomePage = () => {
       </main>
       <Footer />
       <style>{`
-      
         @keyframes cardFadeIn { from { opacity:0; transform:translateY(12px) scale(0.97); } to { opacity:1; transform:translateY(0) scale(1); } }
         @keyframes fadeSlideDown { from { opacity:0; transform:translateY(-6px); } to { opacity:1; transform:translateY(0); } }
       `}</style>

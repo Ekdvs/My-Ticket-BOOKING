@@ -2,12 +2,23 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import Axios from "../../utils/Axios";
 import SummaryApi from "../../api/SummaryApi";
-import toast from "react-hot-toast";
+import { toast } from "react-hot-toast";
+import Navbar from "../components/Navbar";
+import Footer from "../components/Footer";
+import {
+  FiLock,
+  FiShield,
+  FiArrowLeft,
+  FiAlertTriangle,
+  FiCheckCircle,
+  FiCreditCard,
+  FiHash,
+  FiPackage,
+  FiArrowRight,
+  FiRefreshCw,
+  FiExternalLink,
+} from "react-icons/fi";
 
-// ❌ NO payhere SDK — it fires XHR that CORS blocks on every origin not whitelisted by PayHere
-// ❌ NO declare global { interface Window { payhere: any } }
-
-// Swap to "https://www.payhere.lk/pay/checkout" for production
 const PAYHERE_URL = "https://sandbox.payhere.lk/pay/checkout";
 
 export default function PaymentPage() {
@@ -17,7 +28,6 @@ export default function PaymentPage() {
   const [paying,      setPaying]      = useState(false);
   const [paymentData, setPaymentData] = useState<Record<string, string> | null>(null);
 
-  // ================= FETCH PAYMENT DATA FROM BACKEND =================
   useEffect(() => {
     if (!bookingId) return;
 
@@ -27,10 +37,8 @@ export default function PaymentPage() {
           method: SummaryApi.createPayment.method,
           url: `${SummaryApi.createPayment.url}?bookingId=${bookingId}`,
         });
-        console.log("Payment data received:", res.data);
         setPaymentData(res.data);
       } catch (err: any) {
-        console.error("Failed to fetch payment data:", err);
         toast.error("Failed to prepare payment. Please try again.");
       } finally {
         setLoading(false);
@@ -40,10 +48,6 @@ export default function PaymentPage() {
     loadPayment();
   }, [bookingId]);
 
-  // ================= PAY: hidden form POST → redirect to PayHere =================
-  // PayHere's JS SDK fires XHR to checkoutJ which gets CORS-blocked on every
-  // non-whitelisted origin (including localhost). The fix is a plain HTML form
-  // POST — the browser follows it as a full-page redirect, no XHR involved.
   const startPayment = () => {
     if (!paymentData) {
       toast.error("Payment data is not ready.");
@@ -54,18 +58,17 @@ export default function PaymentPage() {
     const missing  = required.filter((k) => !paymentData[k]);
     if (missing.length > 0) {
       toast.error(`Payment setup error — missing: ${missing.join(", ")}`);
-      console.error("Missing fields:", missing, paymentData);
       return;
     }
 
     setPaying(true);
 
-    const form    = document.createElement("form");
-    form.method   = "POST";
-    form.action   = PAYHERE_URL;
+    const form  = document.createElement("form");
+    form.method = "POST";
+    form.action = PAYHERE_URL;
 
     Object.entries(paymentData).forEach(([key, value]) => {
-      if (value == null) return;           // skip null / undefined fields
+      if (value == null) return;
       const input  = document.createElement("input");
       input.type   = "hidden";
       input.name   = key;
@@ -74,102 +77,230 @@ export default function PaymentPage() {
     });
 
     document.body.appendChild(form);
-    form.submit();                         // browser navigates away — no cleanup needed
+    form.submit();
   };
 
-  // ================= LOADING =================
+  /* ── Loading ── */
   if (loading) {
     return (
-      <div className="h-screen flex items-center justify-center bg-gray-50">
-        <div className="flex flex-col items-center gap-4">
-          <div className="w-10 h-10 border-4 border-blue-600 border-t-transparent rounded-full animate-spin" />
-          <p className="text-gray-500 text-sm animate-pulse">Preparing secure payment…</p>
+      <>
+        <Navbar />
+        <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 flex items-center justify-center">
+          <div className="flex flex-col items-center gap-5">
+            <div className="relative">
+              <div className="w-16 h-16 border-4 border-blue-100 rounded-full" />
+              <div className="w-16 h-16 border-4 border-blue-600 border-t-transparent rounded-full animate-spin absolute inset-0" />
+              <FiLock className="absolute inset-0 m-auto text-blue-600 text-xl" />
+            </div>
+            <div className="text-center">
+              <p className="text-gray-700 font-semibold">Preparing Secure Payment</p>
+              <p className="text-gray-400 text-sm mt-1 animate-pulse">Please wait a moment…</p>
+            </div>
+          </div>
         </div>
-      </div>
+        <Footer />
+      </>
     );
   }
 
-  // ================= ERROR =================
+  /* ── Error ── */
   if (!paymentData) {
     return (
-      <div className="h-screen flex items-center justify-center bg-gray-50">
-        <div className="text-center space-y-3">
-          <p className="text-3xl">⚠️</p>
-          <p className="text-red-500 font-semibold">Failed to load payment details</p>
-          <p className="text-gray-400 text-sm">Please go back and try again.</p>
-          <button
-            onClick={() => window.history.back()}
-            className="mt-2 text-blue-600 underline text-sm"
-          >
-            ← Go back
-          </button>
+      <>
+        <Navbar />
+        <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 flex items-center justify-center p-4">
+          <div className="bg-white rounded-2xl shadow-lg border border-red-100 p-8 max-w-sm w-full text-center space-y-4">
+            <div className="w-16 h-16 bg-red-50 rounded-full flex items-center justify-center mx-auto">
+              <FiAlertTriangle className="text-red-500 text-2xl" />
+            </div>
+            <div>
+              <h2 className="text-lg font-bold text-gray-800">Payment Setup Failed</h2>
+              <p className="text-gray-500 text-sm mt-1">
+                We couldn't load your payment details. Please go back and try again.
+              </p>
+            </div>
+            <button
+              onClick={() => window.history.back()}
+              className="flex items-center gap-2 text-blue-600 hover:text-blue-700 text-sm font-medium mx-auto transition-colors"
+            >
+              <FiArrowLeft /> Go back to booking
+            </button>
+          </div>
         </div>
-      </div>
+        <Footer />
+      </>
     );
   }
 
-  // ================= PAYMENT PAGE =================
+  const amount   = parseFloat(paymentData.amount || "0");
+  const currency = paymentData.currency || "LKR";
+
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100 p-4">
-      <div className="bg-white w-full max-w-md rounded-2xl shadow-lg p-6 text-center space-y-6">
+    <>
+      
 
-        <div className="text-5xl">🔐</div>
+      <Navbar />
 
-        <div className="space-y-1">
-          <h1 className="text-2xl font-bold text-gray-800">Secure Payment</h1>
-          <p className="text-gray-500 text-sm">
-            You'll be redirected to PayHere's secure checkout page
-          </p>
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 py-10 px-4">
+        <div className="max-w-lg mx-auto space-y-5">
+
+          {/* Back Button */}
+          <button
+            onClick={() => window.history.back()}
+            className="flex items-center gap-2 text-gray-500 hover:text-blue-600 text-sm font-medium transition-colors group"
+          >
+            <FiArrowLeft className="group-hover:-translate-x-1 transition-transform duration-200" />
+            Back to Booking
+          </button>
+
+          {/* Header Card */}
+          <div className="bg-gradient-to-br from-blue-600 to-indigo-700 rounded-2xl p-6 text-white shadow-xl shadow-blue-200">
+            <div className="flex items-center gap-4">
+              <div className="w-14 h-14 bg-white/20 rounded-2xl flex items-center justify-center backdrop-blur-sm flex-shrink-0">
+                <FiLock className="text-white text-2xl" />
+              </div>
+              <div>
+                <h1 className="text-2xl font-extrabold">Secure Checkout</h1>
+                <p className="text-blue-100 text-sm mt-0.5">
+                  You'll be redirected to PayHere's verified payment gateway
+                </p>
+              </div>
+            </div>
+
+            {/* SSL indicators */}
+            <div className="flex flex-wrap gap-3 mt-5">
+              {[
+                { icon: <FiShield className="text-green-300" />,   label: "SSL Encrypted" },
+                { icon: <FiCheckCircle className="text-green-300" />, label: "PCI Compliant" },
+                { icon: <FiLock className="text-green-300" />,      label: "Central Bank Approved" },
+              ].map(({ icon, label }) => (
+                <div key={label} className="flex items-center gap-1.5 bg-white/10 rounded-lg px-3 py-1.5 text-xs font-medium text-white/90 backdrop-blur-sm">
+                  {icon} {label}
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Order Summary Card */}
+          <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
+            <div className="px-5 py-4 border-b border-gray-100 flex items-center gap-2">
+              <FiPackage className="text-blue-500" />
+              <h2 className="font-semibold text-gray-800 text-sm uppercase tracking-wide">Order Summary</h2>
+            </div>
+
+            <div className="p-5 space-y-3">
+              {/* Booking ID */}
+              <div className="flex items-center justify-between bg-gray-50 rounded-xl px-4 py-3">
+                <span className="flex items-center gap-2 text-sm text-gray-500">
+                  <FiHash className="text-gray-400" /> Booking ID
+                </span>
+                <span className="font-mono text-xs bg-white border border-gray-200 px-2.5 py-1 rounded-lg text-gray-700 max-w-[180px] truncate">
+                  {paymentData.order_id}
+                </span>
+              </div>
+
+              {/* Items */}
+              <div className="flex items-center justify-between px-1">
+                <span className="flex items-center gap-2 text-sm text-gray-500">
+                  <FiCreditCard className="text-gray-400" /> Item(s)
+                </span>
+                <span className="text-sm font-medium text-gray-700 text-right max-w-[200px]">
+                  {paymentData.items}
+                </span>
+              </div>
+
+              {/* Divider */}
+              <div className="border-t border-dashed border-gray-200 my-1" />
+
+              {/* Total */}
+              <div className="flex items-center justify-between px-1">
+                <span className="text-base font-bold text-gray-900">Total Amount</span>
+                <div className="text-right">
+                  <span className="text-2xl font-extrabold text-blue-600">
+                    {currency} {amount.toLocaleString("en-LK", { minimumFractionDigits: 2 })}
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* How it works */}
+          <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5">
+            <h3 className="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-4">What happens next?</h3>
+            <div className="space-y-3">
+              {[
+                { step: "1", title: "Click Pay Now",          desc: "You'll be securely redirected to PayHere",             color: "bg-blue-100 text-blue-700" },
+                { step: "2", title: "Complete Payment",        desc: "Enter your card or use mobile payment options",        color: "bg-indigo-100 text-indigo-700" },
+                { step: "3", title: "Instant Confirmation",    desc: "Your ticket booking is confirmed immediately",          color: "bg-green-100 text-green-700" },
+              ].map(({ step, title, desc, color }) => (
+                <div key={step} className="flex items-start gap-3">
+                  <span className={`w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0 mt-0.5 ${color}`}>
+                    {step}
+                  </span>
+                  <div>
+                    <p className="text-sm font-semibold text-gray-800">{title}</p>
+                    <p className="text-xs text-gray-500">{desc}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Pay Button */}
+          <button
+            onClick={startPayment}
+            disabled={paying}
+            className={`w-full flex items-center justify-center gap-3 py-4 rounded-2xl text-base font-bold transition-all duration-200 shadow-lg ${
+              paying
+                ? "bg-gray-100 text-gray-400 cursor-not-allowed shadow-none"
+                : "bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white shadow-blue-200 hover:shadow-blue-300 hover:-translate-y-0.5 active:translate-y-0"
+            }`}
+          >
+            {paying ? (
+              <>
+                <FiRefreshCw className="text-lg animate-spin" />
+                Redirecting to PayHere…
+              </>
+            ) : (
+              <>
+                <FiLock className="text-lg" />
+                Pay {currency} {amount.toLocaleString("en-LK", { minimumFractionDigits: 2 })} Securely
+                <FiArrowRight className="text-lg" />
+              </>
+            )}
+          </button>
+
+          {/* Footer note */}
+          <div className="text-center space-y-2 pb-4">
+            <p className="text-xs text-gray-400">
+              By proceeding, you agree to PayHere's{" "}
+              <a
+                href="https://www.payhere.lk/terms"
+                target="_blank"
+                rel="noreferrer"
+                className="text-blue-500 hover:underline inline-flex items-center gap-0.5"
+              >
+                Terms of Service <FiExternalLink className="text-[10px]" />
+              </a>
+            </p>
+            <p className="text-xs text-gray-400">
+              Powered by{" "}
+              <a
+                href="https://www.payhere.lk"
+                target="_blank"
+                rel="noreferrer"
+                className="text-blue-500 hover:underline font-medium"
+              >
+                PayHere
+              </a>{" "}
+              — Central Bank of Sri Lanka approved payment gateway
+            </p>
+          </div>
+
         </div>
-
-        {/* Order summary */}
-        <div className="bg-gray-50 border border-gray-100 rounded-xl p-4 text-left space-y-2 text-sm">
-          <div className="flex justify-between">
-            <span className="text-gray-400">Booking ID</span>
-            <span className="font-mono text-xs text-gray-600 truncate max-w-[200px]">
-              {paymentData.order_id}
-            </span>
-          </div>
-          <div className="flex justify-between">
-            <span className="text-gray-400">Items</span>
-            <span className="text-gray-700">{paymentData.items}</span>
-          </div>
-          <div className="border-t border-gray-100 my-1" />
-          <div className="flex justify-between items-center">
-            <span className="text-gray-700 font-medium">Total</span>
-            <span className="text-blue-700 font-bold text-base">
-              {paymentData.currency} {paymentData.amount}
-            </span>
-          </div>
-        </div>
-
-        {/* Pay button */}
-        <button
-          onClick={startPayment}
-          disabled={paying}
-          className="w-full bg-blue-600 text-white py-3 rounded-xl font-semibold
-                     hover:bg-blue-700 active:scale-95 transition-all
-                     disabled:opacity-60 disabled:cursor-not-allowed
-                     flex items-center justify-center gap-2"
-        >
-          {paying ? (
-            <>
-              <span className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
-              Redirecting to PayHere…
-            </>
-          ) : (
-            "Pay Now →"
-          )}
-        </button>
-
-        <p className="text-xs text-gray-400">
-          Powered by{" "}
-          <a href="https://www.payhere.lk" target="_blank" rel="noreferrer" className="underline">
-            PayHere
-          </a>{" "}
-          — Central Bank approved secure gateway
-        </p>
       </div>
-    </div>
+
+      <Footer />
+    </>
   );
 }
