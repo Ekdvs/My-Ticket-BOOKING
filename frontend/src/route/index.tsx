@@ -36,6 +36,7 @@ import VerifyEmail from "../pages/user/VerifyEmail";
 import EventDetailsPage from "../pages/pages/EventDetailsPage";
 import BookingPage from "../pages/pages/BookingPage";
 import PaymentPage from "../pages/pages/payment";
+import SuccessPage from "../pages/pages/SuccessPage";
 
 
 
@@ -84,7 +85,8 @@ const router = createBrowserRouter([
 
      { path: "/event/:id", element: <EventDetailsPage /> },
      {path:"/booking/:id", element: <BookingPage />},
-     {path:"/payment/:bookingId", element: <PaymentPage />}
+     {path:"/payment/:bookingId", element: <PaymentPage />},
+     {path:"/success", element: <SuccessPage />}
       
     ],
   },
