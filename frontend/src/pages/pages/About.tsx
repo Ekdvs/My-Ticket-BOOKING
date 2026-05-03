@@ -5,6 +5,7 @@ import {
 } from "lucide-react";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
+import { Link } from "react-router-dom";
 
 type TeamMember = {
   name: string;
@@ -241,18 +242,18 @@ export default function About() {
               </p>
 
               <div className="flex gap-4 flex-wrap">
-                <a
-                  href="#team"
+                <Link
+                  to="#team"
                   className="inline-flex items-center gap-2 bg-gradient-to-r from-orange-500 to-red-500 text-white px-6 py-3 rounded-xl font-bold hover:opacity-90 transition-opacity"
                 >
                   Meet the Team <ArrowRight size={16} />
-                </a>
-                <a
-                  href="/events"
+                </Link>
+                <Link
+                  to="/events"
                   className="inline-flex items-center gap-2 border border-white/10 text-white px-6 py-3 rounded-xl font-bold hover:bg-white/5 transition-colors"
                 >
                   Browse Events
-                </a>
+                </Link>
               </div>
             </div>
 
@@ -456,12 +457,12 @@ export default function About() {
                 <h3 className="text-white font-black text-lg">Want to join us?</h3>
                 <p className="text-gray-400 text-sm mt-1">We're always looking for passionate people who love events and tech.</p>
               </div>
-              <a
-                href="/careers"
+              <Link
+                to="/careers"
                 className="flex-shrink-0 flex items-center gap-2 bg-gradient-to-r from-orange-500 to-red-500 text-white px-6 py-3 rounded-xl font-bold hover:opacity-90 transition-opacity"
               >
                 See Open Roles <ArrowRight size={16} />
-              </a>
+              </Link>
             </div>
           </div>
         </section>
@@ -533,19 +534,19 @@ export default function About() {
               Join 320,000+ Sri Lankans who discover, book, and enjoy events with MyTickets.
             </p>
             <div className="flex flex-wrap gap-4 justify-center">
-              <a
-                href="/events"
+              <Link
+                to="/events"
                 className="inline-flex items-center gap-2 bg-gradient-to-r from-orange-500 to-red-500 text-white px-8 py-4 rounded-xl font-black text-base hover:opacity-90 transition-opacity"
               >
                 <Ticket size={18} />
                 Browse All Events
-              </a>
-              <a
-                href="/contact"
+              </Link>
+              <Link
+                to="/contact"
                 className="inline-flex items-center gap-2 border border-white/10 text-white px-8 py-4 rounded-xl font-bold text-base hover:bg-white/5 transition-colors"
               >
                 Get In Touch
-              </a>
+              </Link>
             </div>
 
             <div className="mt-16 flex items-center justify-center gap-6 flex-wrap text-sm text-gray-600">

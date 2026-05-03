@@ -1,6 +1,7 @@
 import { Shield, Lock, Eye, Database, UserCheck, Bell } from "lucide-react";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
+import { Link } from "react-router-dom";
 
 const sections = [
   {
@@ -105,9 +106,9 @@ export default function Privacy() {
         <div className="bg-gradient-to-r from-orange-500/10 to-red-500/10 border border-orange-500/20 rounded-2xl p-8 text-center">
           <h3 className="text-white font-bold text-lg mb-2">Have questions about your privacy?</h3>
           <p className="text-gray-400 text-sm mb-4">Our Data Protection Officer is here to help.</p>
-          <a href="mailto:privacy@mytickets.lk" className="inline-flex items-center gap-2 bg-gradient-to-r from-orange-500 to-red-500 text-white px-6 py-2.5 rounded-xl text-sm font-bold">
+          <Link to="mailto:privacy@mytickets.lk" className="inline-flex items-center gap-2 bg-gradient-to-r from-orange-500 to-red-500 text-white px-6 py-2.5 rounded-xl text-sm font-bold">
             Contact Privacy Team
-          </a>
+          </Link>
         </div>
       </div>
     </div>

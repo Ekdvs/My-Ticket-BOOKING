@@ -1,4 +1,4 @@
-import { useSearchParams, useNavigate } from "react-router-dom";
+import { useSearchParams, useNavigate, Link } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 
@@ -69,9 +69,9 @@ export default function CancelPage() {
 
         <p className="text-xs text-gray-400">
           Need help?{" "}
-          <a href="mailto:support@ekdvs.xyz" className="underline">
+          <Link to="mailto:support@ekdvs.xyz" className="underline">
             Contact support
-          </a>
+          </Link>
         </p>
 
       </div>

@@ -1,4 +1,5 @@
-import { RefreshCw, Clock, CheckCircle, XCircle, AlertCircle, CreditCard } from "lucide-react";
+import { RefreshCw, Clock, CheckCircle, XCircle, AlertCircle, CreditCard,  } from "lucide-react";
+import { Link } from "react-router-dom";
 
 type ColorKey = "green" | "yellow" | "red";
 
@@ -161,12 +162,12 @@ export default function RefundPolicy() {
         <div className="bg-gradient-to-r from-orange-500/10 to-red-500/10 border border-orange-500/20 rounded-2xl p-8 text-center">
           <h3 className="text-white font-bold text-lg mb-2">Need help with a refund?</h3>
           <p className="text-gray-400 text-sm mb-4">Our support team is ready to assist you.</p>
-          <a
-            href="/contact"
+          <Link
+            to="/contact"
             className="inline-flex items-center gap-2 bg-gradient-to-r from-orange-500 to-red-500 text-white px-6 py-2.5 rounded-xl text-sm font-bold"
           >
             Contact Support
-          </a>
+          </Link>
         </div>
       </div>
     </div>

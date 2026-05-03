@@ -28,30 +28,36 @@ const UserDashboard = () => {
   const navigate = useNavigate();
   const token = localStorage.getItem("accessToken");
 
-  useEffect(() => {
-    const fetchUserData = async () => {
-      if (!token) { navigate("/login"); return; }
-      try {
-        const res = await Axios({
-          method: SummaryApi.login_user.method,
-          url: SummaryApi.login_user.url,
-          withCredentials: true,
-        });
-        if (res.data.success) {
-          setUser(res.data.data);
-        } else {
-          toast.error("Failed to fetch user data");
-          localStorage.clear();
-          navigate("/login");
-        }
-      } catch {
-        toast.error("Server error");
-      } finally {
-        setLoading(false);
+useEffect(() => {
+  const fetchUserData = async () => {
+    if (!token) {
+      navigate("/login");
+      return;
+    }
+
+    try {
+      const res = await Axios({
+        method: SummaryApi.login_user.method,
+        url: SummaryApi.login_user.url,
+        withCredentials: true,
+      });
+
+      if (res.data.success) {
+        setUser(res.data.data);
+      } else {
+        toast.error("Failed to fetch user data");
+        localStorage.clear();
+        navigate("/login");
       }
-    };
-    fetchUserData();
-  }, [token, navigate]);
+    } catch {
+      toast.error("Server error");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  fetchUserData();
+}, [token, navigate]);
 
   const handleLogout = async () => {
     try {
@@ -200,7 +206,7 @@ const SidebarContent = ({
       <div className="flex items-center gap-3 px-3 py-3 bg-indigo-50 rounded-xl mb-6 border border-indigo-100">
         <div className="w-9 h-9 rounded-full overflow-hidden bg-indigo-200 flex items-center justify-center">
           {user.avatar
-            ? <img src={user.avatar} alt="avatar" className="w-full h-full object-cover" />
+            ? <img src={user.avatar} referrerPolicy="no-referrer" alt="avatar" className="w-full h-full object-cover" />
             : <User size={16} className="text-indigo-700" />
           }
         </div>

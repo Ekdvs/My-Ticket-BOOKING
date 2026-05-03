@@ -1,5 +1,5 @@
 import {  useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import Axios from "../../utils/Axios";
 import SummaryApi from "../../api/SummaryApi";
 import { toast } from "react-hot-toast";
@@ -302,14 +302,14 @@ export default function PaymentPage() {
             </p>
             <p className="text-xs text-gray-400">
               Powered by{" "}
-              <a
-                href="https://www.payhere.lk"
+              <Link
+                to="https://www.payhere.lk"
                 target="_blank"
                 rel="noreferrer"
                 className="text-blue-500 hover:underline font-medium"
               >
                 PayHere
-              </a>{" "}
+              </Link>{" "}
               — Central Bank of Sri Lanka approved payment gateway
             </p>
           </div>

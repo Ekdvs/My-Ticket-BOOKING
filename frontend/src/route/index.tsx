@@ -39,7 +39,8 @@ import PaymentPage from "../pages/pages/payment";
 import SuccessPage from "../pages/pages/SuccessPage";
 import CancelPage from "../pages/pages/Cancelpage";
 import NotFound from "../pages/pages/NotFound";
-import EventsPage from "../pages/EventsPage";
+import EventsPage from "../pages/pages/EventsPage";
+
 
 
 
@@ -92,7 +93,7 @@ const router = createBrowserRouter([
      {path:"/success", element: <SuccessPage />},
      {path:"/cancel", element: <CancelPage />},
      {path:"*", element: <NotFound/>},
-     {path:"/events" , element: <EventsPage />}
+     {path:"/events" , element: <EventsPage/>}
       
     ],
   },

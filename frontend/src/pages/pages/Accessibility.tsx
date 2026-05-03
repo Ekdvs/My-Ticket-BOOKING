@@ -1,6 +1,7 @@
 
 import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
+import { Link } from 'react-router-dom';
 
 const Accessibility = () => {
       const features = [
@@ -71,9 +72,9 @@ const Accessibility = () => {
           </p>
           <p className="text-gray-400 text-sm">
             If you encounter an accessibility barrier, please{" "}
-            <a href="/contact" className="text-purple-400 hover:underline">report it here</a>{" "}
+            <Link to="/contact" className="text-purple-400 hover:underline">report it here</Link>{" "}
             or email us at{" "}
-            <a href="mailto:accessibility@mytickets.lk" className="text-purple-400 hover:underline">accessibility@mytickets.lk</a>.
+            <Link to="mailto:accessibility@mytickets.lk" className="text-purple-400 hover:underline">accessibility@mytickets.lk</Link>.
           </p>
         </div>
       </div>

@@ -2,6 +2,7 @@
 import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
 import { ExternalLink } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 const PressKit = () => {
     const downloads = [
@@ -77,7 +78,9 @@ const PressKit = () => {
         <div className="bg-gradient-to-r from-orange-500/10 to-red-500/10 border border-orange-500/20 rounded-2xl p-8">
           <h3 className="text-white font-bold text-lg mb-2">Media Contact</h3>
           <p className="text-gray-400 text-sm mb-1">For press inquiries, interviews, and partnerships:</p>
-          <a href="mailto:press@mytickets.lk" className="text-orange-400 hover:underline text-sm font-semibold">press@mytickets.lk</a>
+          <Link to="mailto:press@mytickets.lk" className="text-orange-400 hover:underline text-sm font-semibold">
+            press@mytickets.lk
+          </Link>
           <p className="text-gray-600 text-xs mt-2">We typically respond to press inquiries within 24 hours.</p>
         </div>
       </div>

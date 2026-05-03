@@ -4,6 +4,7 @@ import { Mail, Phone, MapPin, Clock, Send, MessageSquare, CheckCircle, ChevronRi
 import { FaWhatsapp, FaFacebook, FaInstagram } from "react-icons/fa";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
+import { Link } from "react-router-dom";
 
 // ─── TYPES ────────────────────────────────────────────────────────────────
 type FormState = {
@@ -386,7 +387,7 @@ export default function Contact() {
 
               <p className="text-center text-xs text-gray-600">
                 By submitting, you agree to our{" "}
-                <a href="/privacy" className="text-orange-400 hover:underline">Privacy Policy</a>.
+                <Link to="/privacy" className="text-orange-400 hover:underline">Privacy Policy</Link>.
               </p>
             </div>
           </div>
@@ -399,9 +400,9 @@ export default function Contact() {
               <h3 className="text-white font-black text-sm mb-4">Chat with us on</h3>
               <div className="space-y-3">
                 {SOCIALS.map(({ icon: Icon, label, handle, href, color }) => (
-                  <a
+                  <Link
                     key={label}
-                    href={href}
+                    to={href}
                     className="flex items-center justify-between group bg-gray-800 border border-white/5 hover:border-white/10 rounded-xl px-4 py-3 transition-all"
                   >
                     <div className="flex items-center gap-3">
@@ -412,7 +413,7 @@ export default function Contact() {
                       </div>
                     </div>
                     <ChevronRight size={14} className="text-gray-600 group-hover:text-orange-400 transition-colors" />
-                  </a>
+                  </Link>
                 ))}
               </div>
             </div>
@@ -444,19 +445,19 @@ export default function Contact() {
               <p className="text-gray-500 text-xs mb-4">Check our FAQ for instant help</p>
               <div className="space-y-2">
                 {FAQ_TEASER.map((q) => (
-                  <a
+                  <Link
                     key={q}
-                    href="/faq"
+                    to="/faq"
                     className="flex items-center justify-between gap-2 text-xs text-gray-400 hover:text-orange-400 group transition-colors py-1"
                   >
                     <span>{q}</span>
                     <ChevronRight size={12} className="flex-shrink-0 text-gray-600 group-hover:text-orange-400" />
-                  </a>
+                  </Link>
                 ))}
               </div>
-              <a href="/faq" className="block mt-4 text-center text-xs text-orange-400 font-bold hover:underline">
+              <Link to="/faq" className="block mt-4 text-center text-xs text-orange-400 font-bold hover:underline">
                 View all FAQs →
-              </a>
+              </Link>
             </div>
           </div>
         </div>
@@ -470,15 +471,15 @@ export default function Contact() {
               <p className="text-gray-400 text-sm mt-1">42 Galle Road, Colombo 03, Sri Lanka</p>
               <p className="text-gray-500 text-xs mt-1">Open Mon – Fri, 9 am – 6 pm</p>
             </div>
-            <a
-              href="https://maps.google.com/?q=Galle+Road+Colombo+03"
+            <Link
+              to="https://maps.google.com/?q=Galle+Road+Colombo+03"
               target="_blank"
               rel="noreferrer"
               className="flex items-center gap-2 bg-gray-800 border border-white/10 hover:border-orange-500/30 text-white px-5 py-2.5 rounded-xl text-sm font-bold transition-colors"
             >
               <MapPin size={15} className="text-orange-400" />
               Open in Google Maps
-            </a>
+            </Link>
           </div>
         </div>
       </div>

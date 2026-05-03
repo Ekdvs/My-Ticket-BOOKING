@@ -170,16 +170,16 @@ export default function Footer() {
         <div className="px-5 py-7 md:py-0 md:pb-10 flex flex-col gap-5 md:flex-row md:items-center md:justify-between border-t border-white/5">
           <div className="flex flex-wrap gap-2">
             {SOCIALS.map(({ icon: Icon, href, label }) => (
-              <a
+              <Link
                 key={label}
-                href={href}
+                to={href}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex items-center gap-2 bg-white/5 hover:bg-white/10 border border-white/5 hover:border-white/10 px-3 py-2 rounded-xl text-xs font-semibold text-gray-400 hover:text-white transition-all"
               >
                 <Icon size={14} />
                 <span>{label}</span>
-              </a>
+              </Link>
             ))}
           </div>
 

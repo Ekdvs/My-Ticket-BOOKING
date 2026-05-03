@@ -15,12 +15,13 @@ import {
   LayoutGrid,
   List,
 } from "lucide-react";
-import type { AppEvent } from "../type/type";
-import Axios from "../utils/Axios";
-import SummaryApi from "../api/SummaryApi";
-import Navbar from "./components/Navbar";
-import Footer from "./components/Footer";
-import EventCard from "./components/Eventcard";
+import type { AppEvent } from "../../type/type";
+import Axios from "../../utils/Axios";
+import SummaryApi from "../../api/SummaryApi";
+import Navbar from "../components/Navbar";
+import EventCard from "../components/Eventcard";
+import Footer from "../components/Footer";
+
 
 /* ─── Constants ─── */
 const CATEGORY_META: Record<string, { label: string; emoji: string; color: string }> = {

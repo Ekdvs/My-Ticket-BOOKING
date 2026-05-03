@@ -1,6 +1,7 @@
 import { FileText, AlertTriangle, CreditCard, Ban, Scale, RefreshCw } from "lucide-react";
 import Navbar from "../components/Navbar";
 import  Footer from "../components/Footer";
+import { Link } from "react-router-dom";
 
 const sections = [
   {
@@ -86,7 +87,9 @@ export default function Terms() {
         <div className="bg-gray-900 border border-white/5 rounded-2xl p-8 text-center">
           <p className="text-gray-500 text-sm">
             For legal inquiries, contact us at{" "}
-            <a href="mailto:legal@mytickets.lk" className="text-orange-400 hover:underline">legal@mytickets.lk</a>
+            <Link to="mailto:legal@mytickets.lk" className="text-orange-400 hover:underline">
+              legal@mytickets.lk
+            </Link>
           </p>
           <p className="text-gray-600 text-xs mt-2">MyTickets (Pvt) Ltd · Colombo, Sri Lanka</p>
         </div>

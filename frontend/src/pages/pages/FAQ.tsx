@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { HelpCircle, ChevronDown, Ticket, CreditCard, RefreshCw, User } from "lucide-react";
+import { HelpCircle, ChevronDown, Ticket, CreditCard, RefreshCw, User, Link } from "lucide-react";
 import Footer from "../components/Footer";
 import Navbar from "../components/Navbar";
 
@@ -165,12 +165,12 @@ export default function FAQ() {
           <div className="mt-10 bg-gradient-to-r from-orange-500/10 to-red-500/10 border border-orange-500/20 rounded-2xl p-8 text-center">
             <h3 className="text-white font-bold text-lg mb-2">Still need help?</h3>
             <p className="text-gray-400 text-sm mb-4">Our support team is available 24/7 to assist you.</p>
-            <a
-              href="/contact"
+            <Link
+              to="/contact"
               className="inline-flex items-center gap-2 bg-gradient-to-r from-orange-500 to-red-500 text-white px-6 py-2.5 rounded-xl text-sm font-bold"
             >
               Contact Support
-            </a>
+            </Link>
           </div>
         </div>
       </div>

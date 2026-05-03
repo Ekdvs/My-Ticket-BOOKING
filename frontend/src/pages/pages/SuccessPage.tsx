@@ -1,4 +1,4 @@
-import { useSearchParams, useNavigate } from "react-router-dom";
+import { useSearchParams, useNavigate, Link } from "react-router-dom";
 
 export default function SuccessPage() {
   const [searchParams] = useSearchParams();
@@ -65,9 +65,9 @@ export default function SuccessPage() {
 
         <p className="text-xs text-gray-400">
           Powered by{" "}
-          <a href="https://www.payhere.lk" target="_blank" rel="noreferrer" className="underline">
+          <Link to="https://www.payhere.lk" target="_blank" rel="noreferrer" className="underline">
             PayHere
-          </a>{" "}
+          </Link>
           — Central Bank approved secure gateway
         </p>
       </div>

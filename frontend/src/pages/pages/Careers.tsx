@@ -1,6 +1,7 @@
 import { ArrowRight, Briefcase, MapPin } from "lucide-react";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
+import { Link } from "react-router-dom";
 
 type Dept =
   | "Engineering"
@@ -117,12 +118,12 @@ export function Careers() {
               Send us your CV and we'll keep you in mind for future openings.
             </p>
 
-            <a
-              href="mailto:careers@mytickets.lk"
+            <Link
+              to="mailto:careers@mytickets.lk"
               className="inline-flex items-center gap-2 bg-gradient-to-r from-orange-500 to-red-500 text-white px-6 py-2.5 rounded-xl text-sm font-bold"
             >
               Send Open Application
-            </a>
+            </Link>
           </div>
         </div>
       </div>

@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import {
   Ticket,
   Search,
@@ -167,14 +167,15 @@ export default function Navbar({
           <div className="flex items-center h-16 gap-2">
 
             {/* LOGO */}
-            <a href="/" className="flex items-center gap-2 shrink-0 group">
+            <Link to="/" className="flex items-center gap-2 shrink-0 group">
               <span className="flex items-center justify-center w-8 h-8 rounded-xl bg-orange-500 group-hover:bg-orange-600 transition-colors duration-200">
                 <Ticket size={16} className="text-white" />
               </span>
               <span className="font-black text-gray-900 text-lg tracking-tight hidden sm:block">
                 My<span className="text-orange-500">Tickets</span>
               </span>
-            </a>
+              </Link>
+            
 
             {/* DESKTOP CATEGORIES */}
             <div className="hidden lg:flex items-center gap-0.5 ml-4 flex-1">
@@ -267,21 +268,19 @@ export default function Navbar({
               {/* Auth — Desktop */}
               {!isLoggedIn ? (
                 <>
-                  <a
-                    href="/login"
+                  <Link to="/login"
                     className="hidden sm:flex items-center gap-1.5 px-3 py-2 text-sm font-semibold text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-xl transition-colors duration-150"
                   >
                     <LogIn size={15} />
                     Login
-                  </a>
+                  </Link>
 
-                  <a
-                    href="/register"
+                  <Link to="/register"
                     className="hidden sm:flex items-center gap-1.5 px-3 py-2 text-sm font-semibold text-white bg-orange-500 hover:bg-orange-600 rounded-xl transition-colors duration-150"
                   >
                     <UserPlus size={15} />
                     Register
-                  </a>
+                  </Link>
                 </>
               ) : (
                 <div className="hidden sm:flex items-center gap-2 px-3 py-1.5 bg-gray-100 rounded-xl">
@@ -436,21 +435,19 @@ export default function Navbar({
         <div className="px-4 pb-6 pt-3 border-t border-gray-100 space-y-2 shrink-0">
           {!isLoggedIn ? (
             <>
-              <a
-                href="/login"
+              <Link to="/login"
                 className="flex items-center justify-center gap-2 w-full py-2.5 text-sm font-semibold text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-xl transition-colors duration-150"
               >
                 <LogIn size={15} />
                 Login
-              </a>
+              </Link>
 
-              <a
-                href="/register"
+              <Link to="/register"
                 className="flex items-center justify-center gap-2 w-full py-2.5 text-sm font-semibold text-white bg-orange-500 hover:bg-orange-600 rounded-xl transition-colors duration-150"
               >
                 <UserPlus size={15} />
                 Create Account
-              </a>
+              </Link>
             </>
           ) : (
             <div className="flex items-center gap-3 px-3 py-2.5 bg-gray-50 rounded-xl">
