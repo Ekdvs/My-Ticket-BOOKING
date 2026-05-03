@@ -31,7 +31,6 @@ const CATEGORIES_DATA: Record<string, string[]> = {
 const ICON_MAP: Record<string, React.ElementType> = {
   EVENT: Sparkles,
   MOVIE: Film,
-  THEATRE: Drama,
   SPORT: Trophy,
   HOLIDAY: Palmtree,
   FOOD: UtensilsCrossed,
@@ -41,7 +40,6 @@ const ICON_MAP: Record<string, React.ElementType> = {
 const COLOR_MAP: Record<string, string> = {
   EVENT: "#f97316",
   MOVIE: "#ef4444",
-  THEATRE: "#a855f7",
   SPORT: "#22c55e",
   HOLIDAY: "#06b6d4",
   FOOD: "#eab308",
