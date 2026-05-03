@@ -80,7 +80,7 @@ export default function BookingPage() {
     });
 
     const bookingId = res.data.data.bookingId;
-    console.log("Booking created with ID:", res.data);
+    //console.log("Booking created with ID:", res.data);
 
     toast.success("Booking confirmed! Redirecting to payment…");
 
