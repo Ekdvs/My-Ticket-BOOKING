@@ -279,7 +279,7 @@ export default function Navbar({
                     className="hidden sm:flex items-center gap-1.5 px-3 py-2 text-sm font-semibold text-white bg-orange-500 hover:bg-orange-600 rounded-xl transition-colors duration-150"
                   >
                     <UserPlus size={15} />
-                    Register
+                    Register2
                   </Link>
                 </>
               ) : (
