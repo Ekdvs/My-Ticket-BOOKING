@@ -16,6 +16,8 @@ import {
   Menu,
   ArrowRight,
 } from "lucide-react";
+import SummaryApi from "../../api/SummaryApi";
+import Axios from "../../utils/Axios";
 
 const CATEGORIES_DATA: Record<string, string[]> = {
   EVENT: ["CONCERT", "DINNER_DANCE", "EDM", "CLASSICAL", "EDUCATIONAL", "EXHIBITION", "SEMINAR", "CONFERENCE", "TECH", "FREE", "ONLINE", "DJ"],
@@ -91,6 +93,10 @@ export default function Navbar({
   const [scrolled, setScrolled] = useState(false);
   const searchRef = useRef<HTMLInputElement>(null);
   const dropdownTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const token = localStorage.getItem("accessToken");
+  const isLoggedInFromToken = !!token;
+  const finalIsLoggedIn = isLoggedIn || isLoggedInFromToken;
+  const [user, setUser] = useState<any>(null);
 
   useEffect(() => {
     const mapped = Object.entries(CATEGORIES_DATA).map(([key, sub]) => ({
@@ -108,6 +114,27 @@ export default function Navbar({
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      if (!finalIsLoggedIn) return;
+
+      try {
+        const res = await Axios({
+          method: SummaryApi.login_user.method,
+          url: SummaryApi.login_user.url,
+          withCredentials: true,
+        });
+
+        if (res.data.success) {
+          setUser(res.data.data);
+        }
+      }
+      catch (err) { }
+    };
+
+    fetchUser();
+  }, [finalIsLoggedIn]);
 
   useEffect(() => {
     document.body.style.overflow = mobileOpen ? "hidden" : "";
@@ -174,8 +201,8 @@ export default function Navbar({
               <span className="font-black text-gray-900 text-lg tracking-tight hidden sm:block">
                 My<span className="text-orange-500">Tickets</span>
               </span>
-              </Link>
-            
+            </Link>
+
 
             {/* DESKTOP CATEGORIES */}
             <div className="hidden lg:flex items-center gap-0.5 ml-4 flex-1">
@@ -266,16 +293,18 @@ export default function Navbar({
               </button>
 
               {/* Auth — Desktop */}
-              {!isLoggedIn ? (
+              {!finalIsLoggedIn ? (
                 <>
-                  <Link to="/login"
+                  <Link
+                    to="/login"
                     className="hidden sm:flex items-center gap-1.5 px-3 py-2 text-sm font-semibold text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-xl transition-colors duration-150"
                   >
                     <LogIn size={15} />
                     Login
                   </Link>
 
-                  <Link to="/register"
+                  <Link
+                    to="/register"
                     className="hidden sm:flex items-center gap-1.5 px-3 py-2 text-sm font-semibold text-white bg-orange-500 hover:bg-orange-600 rounded-xl transition-colors duration-150"
                   >
                     <UserPlus size={15} />
@@ -283,12 +312,29 @@ export default function Navbar({
                   </Link>
                 </>
               ) : (
-                <div className="hidden sm:flex items-center gap-2 px-3 py-1.5 bg-gray-100 rounded-xl">
-                  <div className="w-6 h-6 rounded-full bg-orange-500 flex items-center justify-center text-white text-xs font-bold">
-                    {userName?.[0]?.toUpperCase() || "U"}
-                  </div>
-                  <span className="text-sm font-semibold text-gray-800">{userName}</span>
-                </div>
+                <Link
+                  to="/dashboard"
+                  className="hidden sm:flex items-center gap-2 px-3 py-1.5 bg-gray-100 rounded-xl hover:bg-gray-200 transition"
+                >
+                  {/* Avatar */}
+                  {user?.avatar ? (
+                    <img
+                      referrerPolicy="no-referrer"
+                      src={user.avatar}
+                      alt="avatar"
+                      className="w-6 h-6 rounded-full object-cover"
+                    />
+                  ) : (
+                    <div className="w-6 h-6 rounded-full bg-orange-500 flex items-center justify-center text-white text-xs font-bold">
+                      {userName?.[0]?.toUpperCase() || "U"}
+                    </div>
+                  )}
+
+                  {/* Name */}
+                  <span className="text-sm font-semibold text-gray-800">
+                    {userName}
+                  </span>
+                </Link>
               )}
               {/* Mobile hamburger */}
               <button
