@@ -132,7 +132,7 @@ const Login = () => {
 
                     toast.success(backendResponse.data.message);
 
-                    console.log("User data from backend:", backendResponse.data.data);
+                    //console.log("User data from backend:", backendResponse.data.data);
                     const role = backendResponse.data.data.role;
                     if (role === "ADMIN") {
                         navigate("/admin");

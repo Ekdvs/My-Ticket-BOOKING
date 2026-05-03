@@ -16,12 +16,12 @@ type AccordionSectionProps = {
 
 const FOOTER_LINKS: Record<string, FooterLink[]> = {
   Explore: [
-    { label: "Events", path: "/" },
-    { label: "Movies", path: "/" },
-    { label: "Theatre", path: "/" },
-    { label: "Sports", path: "/" },
-    { label: "Holidays", path: "/" },
-    { label: "Foods", path: "/" },
+    { label: "Events", path: "/events?category=EVENT" },
+    { label: "Movies", path: "/events?category=MOVIE" },
+    { label: "Theatre", path: "/events?category=THEATRE" },
+    { label: "Sports", path: "/events?category=SPORT" },
+    { label: "Holidays", path: "/events?category=HOLIDAY" },
+    { label: "Foods", path: "/events?category=FOOD" },
     { label: "Deals", path: "/" },
   ],
   Account: [

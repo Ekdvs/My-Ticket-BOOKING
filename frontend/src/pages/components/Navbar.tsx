@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from "react";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import {
   Ticket,
   Search,
@@ -16,14 +17,13 @@ import {
   ArrowRight,
 } from "lucide-react";
 
-/* ─── Static category data (replace with API fetch as needed) ─── */
 const CATEGORIES_DATA: Record<string, string[]> = {
-  EVENT: ["CONCERT","DINNER_DANCE","EDM","CLASSICAL","EDUCATIONAL","EXHIBITION","SEMINAR","CONFERENCE","TECH","FREE","ONLINE","DJ"],
-  MOVIE: ["ACTION_MOVIE","ADVENTURE_MOVIE","ANIMATION","BIOGRAPHY","COMEDY_MOVIE","CRIME","DOCUMENTARY","DRAMA_MOVIE","FANTASY","HORROR","ROMANCE","SCIENCE_FICTION","THRILLER"],
-  SPORT: ["CRICKET","RUGBY","FOOTBALL","MOTOR_SPORT","BASKETBALL","GOLF","BOXING","VOLLEYBALL"],
-  FOOD: ["FOOD_FESTIVAL","TABLE_RESERVATION","RESTAURANT","PUB_AND_BAR","HOTELS"],
-  HOLIDAY: ["AMUSEMENT_PARK","ADVENTURE_TRAVEL","SURFING","DIVING","WHALE_WATCHING","CAMPING","HIKING","NATIONAL_PARK"],
-  OTHER: ["CULTURAL_FESTIVAL","E_VOUCHERS"],
+  EVENT: ["CONCERT", "DINNER_DANCE", "EDM", "CLASSICAL", "EDUCATIONAL", "EXHIBITION", "SEMINAR", "CONFERENCE", "TECH", "FREE", "ONLINE", "DJ"],
+  MOVIE: ["ACTION_MOVIE", "ADVENTURE_MOVIE", "ANIMATION", "BIOGRAPHY", "COMEDY_MOVIE", "CRIME", "DOCUMENTARY", "DRAMA_MOVIE", "FANTASY", "HORROR", "ROMANCE", "SCIENCE_FICTION", "THRILLER"],
+  SPORT: ["CRICKET", "RUGBY", "FOOTBALL", "MOTOR_SPORT", "BASKETBALL", "GOLF", "BOXING", "VOLLEYBALL"],
+  FOOD: ["FOOD_FESTIVAL", "TABLE_RESERVATION", "RESTAURANT", "PUB_AND_BAR", "HOTELS"],
+  HOLIDAY: ["AMUSEMENT_PARK", "ADVENTURE_TRAVEL", "SURFING", "DIVING", "WHALE_WATCHING", "CAMPING", "HIKING", "NATIONAL_PARK"],
+  OTHER: ["CULTURAL_FESTIVAL", "E_VOUCHERS"],
 };
 
 const ICON_MAP: Record<string, React.ElementType> = {
@@ -55,11 +55,11 @@ interface Category {
 }
 
 interface NavbarProps {
+  isLoggedIn?: boolean;
+  userName?: string;
   activeCategory?: string;
   onCategory?: (key: string, sub?: string) => void;
   onSearch?: (q: string) => void;
-  isLoggedIn?: boolean;
-  userName?: string;
 }
 
 function formatLabel(raw: string) {
@@ -67,12 +67,21 @@ function formatLabel(raw: string) {
 }
 
 export default function Navbar({
-  activeCategory = "ALL",
-  onCategory,
-  onSearch,
   isLoggedIn = false,
   userName = "",
+  activeCategory: propActiveCategory,
+  onCategory,
+  onSearch,
 }: NavbarProps) {
+  const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+
+  const activeCategory =
+    propActiveCategory ??
+    searchParams.get("category")?.toUpperCase() ??
+    "ALL";
+  const activeSubcategory = searchParams.get("subcategory")?.toUpperCase() || "";
+
   const [categories, setCategories] = useState<Category[]>([]);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
@@ -83,7 +92,6 @@ export default function Navbar({
   const searchRef = useRef<HTMLInputElement>(null);
   const dropdownTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  /* ─── Build categories from static data (swap for API fetch) ─── */
   useEffect(() => {
     const mapped = Object.entries(CATEGORIES_DATA).map(([key, sub]) => ({
       key,
@@ -95,55 +103,70 @@ export default function Navbar({
     setCategories(mapped);
   }, []);
 
-  /* ─── Scroll shadow ─── */
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 8);
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  /* ─── Lock body scroll when mobile drawer open ─── */
   useEffect(() => {
     document.body.style.overflow = mobileOpen ? "hidden" : "";
     return () => { document.body.style.overflow = ""; };
   }, [mobileOpen]);
 
-  /* ─── Focus search input ─── */
   useEffect(() => {
     if (searchOpen) setTimeout(() => searchRef.current?.focus(), 50);
   }, [searchOpen]);
 
   const handleCategory = (key: string, sub?: string) => {
-    onCategory?.(key, sub);
+    if (onCategory) {
+      onCategory(key, sub);
+    } else {
+      const params = new URLSearchParams();
+      params.set("category", key);
+      if (sub) params.set("subcategory", sub);
+      navigate(`/events?${params.toString()}`);
+    }
     setMobileOpen(false);
     setOpenDropdown(null);
     setExpandedMobile(null);
+  };
+
+  const handleSearch = (q: string) => {
+    if (!q.trim()) return;
+    if (onSearch) {
+      onSearch(q);
+    } else {
+      const params = new URLSearchParams();
+      params.set("search", q.trim());
+      navigate(`/events?${params.toString()}`);
+    }
+    setSearchOpen(false);
+    setSearchQ("");
   };
 
   const handleDropdownEnter = (key: string) => {
     if (dropdownTimerRef.current) clearTimeout(dropdownTimerRef.current);
     setOpenDropdown(key);
   };
+
   const handleDropdownLeave = () => {
     dropdownTimerRef.current = setTimeout(() => setOpenDropdown(null), 120);
   };
 
   return (
     <>
-      {/* ══════════════════════════════════════════
-          NAVBAR
-      ══════════════════════════════════════════ */}
+      {/* ── NAVBAR ── */}
       <nav
-        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-          scrolled
-            ? "bg-white/95 backdrop-blur-md shadow-[0_2px_20px_rgba(0,0,0,0.08)]"
-            : "bg-white"
-        }`}
+        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${scrolled
+          ? "bg-white/95 backdrop-blur-md shadow-[0_2px_20px_rgba(0,0,0,0.08)]"
+          : "bg-white"
+          }`}
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
           <div className="flex items-center h-16 gap-2">
 
-            {/* ── LOGO ── */}
+            {/* LOGO */}
             <a href="/" className="flex items-center gap-2 shrink-0 group">
               <span className="flex items-center justify-center w-8 h-8 rounded-xl bg-orange-500 group-hover:bg-orange-600 transition-colors duration-200">
                 <Ticket size={16} className="text-white" />
@@ -153,7 +176,7 @@ export default function Navbar({
               </span>
             </a>
 
-            {/* ── DESKTOP CATEGORIES ── */}
+            {/* DESKTOP CATEGORIES */}
             <div className="hidden lg:flex items-center gap-0.5 ml-4 flex-1">
               {categories.map((cat) => {
                 const Icon = cat.icon;
@@ -169,11 +192,10 @@ export default function Navbar({
                   >
                     <button
                       onClick={() => handleCategory(cat.key)}
-                      className={`flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-semibold transition-all duration-150 outline-none focus-visible:ring-2 focus-visible:ring-orange-400 ${
-                        isActive
-                          ? "text-orange-600 bg-orange-50"
-                          : "text-gray-600 hover:text-gray-900 hover:bg-gray-100"
-                      }`}
+                      className={`flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-semibold transition-all duration-150 outline-none focus-visible:ring-2 focus-visible:ring-orange-400 ${isActive
+                        ? "text-orange-600 bg-orange-50"
+                        : "text-gray-600 hover:text-gray-900 hover:bg-gray-100"
+                        }`}
                       style={isActive ? { color: cat.color } : {}}
                     >
                       <Icon size={14} />
@@ -181,7 +203,8 @@ export default function Navbar({
                       {cat.sub.length > 0 && (
                         <ChevronDown
                           size={12}
-                          className={`transition-transform duration-200 ${isOpen ? "rotate-180" : ""}`}
+                          className={`transition-transform duration-200 ${isOpen ? "rotate-180" : ""
+                            }`}
                         />
                       )}
                     </button>
@@ -189,28 +212,36 @@ export default function Navbar({
                     {/* Dropdown */}
                     {cat.sub.length > 0 && (
                       <div
-                        className={`absolute top-full left-0 mt-1.5 w-52 bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden transition-all duration-200 origin-top-left ${
-                          isOpen
-                            ? "opacity-100 scale-100 translate-y-0 pointer-events-auto"
-                            : "opacity-0 scale-95 -translate-y-1 pointer-events-none"
-                        }`}
+                        className={`absolute top-full left-0 mt-1.5 w-52 bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden transition-all duration-200 origin-top-left ${isOpen
+                          ? "opacity-100 scale-100 translate-y-0 pointer-events-auto"
+                          : "opacity-0 scale-95 -translate-y-1 pointer-events-none"
+                          }`}
                         onMouseEnter={() => handleDropdownEnter(cat.key)}
                         onMouseLeave={handleDropdownLeave}
                       >
                         <div className="p-1.5 max-h-72 overflow-y-auto">
-                          {cat.sub.map((s) => (
-                            <button
-                              key={s}
-                              onClick={() => handleCategory(cat.key, s)}
-                              className="w-full text-left px-3 py-2 text-sm text-gray-600 hover:text-gray-900 hover:bg-gray-50 rounded-xl transition-colors duration-100 flex items-center justify-between group/item"
-                            >
-                              <span>{formatLabel(s)}</span>
-                              <ArrowRight
-                                size={12}
-                                className="opacity-0 group-hover/item:opacity-100 transition-all -translate-x-1 group-hover/item:translate-x-0 duration-150"
-                              />
-                            </button>
-                          ))}
+                          {cat.sub.map((s) => {
+                            const isActiveSub = activeSubcategory === s && isActive;
+                            return (
+                              <button
+                                key={s}
+                                onClick={() => handleCategory(cat.key, s)}
+                                className={`w-full text-left px-3 py-2 text-sm rounded-xl transition-colors duration-100 flex items-center justify-between group/item ${isActiveSub
+                                  ? "bg-orange-50 text-orange-600 font-semibold"
+                                  : "text-gray-600 hover:text-gray-900 hover:bg-gray-50"
+                                  }`}
+                              >
+                                <span>{formatLabel(s)}</span>
+                                <ArrowRight
+                                  size={12}
+                                  className={`transition-all -translate-x-1 duration-150 ${isActiveSub
+                                    ? "opacity-100 translate-x-0"
+                                    : "opacity-0 group-hover/item:opacity-100 group-hover/item:translate-x-0"
+                                    }`}
+                                />
+                              </button>
+                            );
+                          })}
                         </div>
                       </div>
                     )}
@@ -219,22 +250,21 @@ export default function Navbar({
               })}
             </div>
 
-            {/* ── RIGHT ACTIONS ── */}
+            {/* RIGHT ACTIONS */}
             <div className="ml-auto flex items-center gap-1">
               {/* Search toggle */}
               <button
                 onClick={() => setSearchOpen((p) => !p)}
                 aria-label="Toggle search"
-                className={`p-2 rounded-xl transition-all duration-150 outline-none focus-visible:ring-2 focus-visible:ring-orange-400 ${
-                  searchOpen
-                    ? "bg-orange-50 text-orange-600"
-                    : "text-gray-500 hover:text-gray-900 hover:bg-gray-100"
-                }`}
+                className={`p-2 rounded-xl transition-all duration-150 outline-none focus-visible:ring-2 focus-visible:ring-orange-400 ${searchOpen
+                  ? "bg-orange-50 text-orange-600"
+                  : "text-gray-500 hover:text-gray-900 hover:bg-gray-100"
+                  }`}
               >
                 {searchOpen ? <X size={18} /> : <Search size={18} />}
               </button>
 
-              {/* Auth */}
+              {/* Auth — Desktop */}
               {!isLoggedIn ? (
                 <>
                   <a
@@ -244,6 +274,7 @@ export default function Navbar({
                     <LogIn size={15} />
                     Login
                   </a>
+
                   <a
                     href="/register"
                     className="hidden sm:flex items-center gap-1.5 px-3 py-2 text-sm font-semibold text-white bg-orange-500 hover:bg-orange-600 rounded-xl transition-colors duration-150"
@@ -260,7 +291,6 @@ export default function Navbar({
                   <span className="text-sm font-semibold text-gray-800">{userName}</span>
                 </div>
               )}
-
               {/* Mobile hamburger */}
               <button
                 onClick={() => setMobileOpen(true)}
@@ -272,11 +302,10 @@ export default function Navbar({
             </div>
           </div>
 
-          {/* ── SEARCH BAR (slide down) ── */}
+          {/* SEARCH BAR */}
           <div
-            className={`overflow-hidden transition-all duration-300 ease-in-out ${
-              searchOpen ? "max-h-16 opacity-100 pb-3" : "max-h-0 opacity-0"
-            }`}
+            className={`overflow-hidden transition-all duration-300 ease-in-out ${searchOpen ? "max-h-16 opacity-100 pb-3" : "max-h-0 opacity-0"
+              }`}
           >
             <div className="relative">
               <Search
@@ -288,7 +317,7 @@ export default function Navbar({
                 value={searchQ}
                 onChange={(e) => setSearchQ(e.target.value)}
                 onKeyDown={(e) => {
-                  if (e.key === "Enter") onSearch?.(searchQ);
+                  if (e.key === "Enter") handleSearch(searchQ);
                   if (e.key === "Escape") setSearchOpen(false);
                 }}
                 placeholder="Search events, movies, sports…"
@@ -299,24 +328,18 @@ export default function Navbar({
         </div>
       </nav>
 
-      {/* ══════════════════════════════════════════
-          MOBILE BACKDROP
-      ══════════════════════════════════════════ */}
+      {/* ── MOBILE BACKDROP ── */}
       <div
         onClick={() => setMobileOpen(false)}
-        className={`fixed inset-0 z-50 bg-black/50 backdrop-blur-sm transition-opacity duration-300 lg:hidden ${
-          mobileOpen ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"
-        }`}
+        className={`fixed inset-0 z-50 bg-black/50 backdrop-blur-sm transition-opacity duration-300 lg:hidden ${mobileOpen ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"
+          }`}
         aria-hidden="true"
       />
 
-      {/* ══════════════════════════════════════════
-          MOBILE DRAWER
-      ══════════════════════════════════════════ */}
+      {/* ── MOBILE DRAWER ── */}
       <div
-        className={`fixed top-0 right-0 h-full w-[88vw] max-w-sm bg-white z-50 shadow-2xl flex flex-col transition-transform duration-300 ease-[cubic-bezier(0.32,0.72,0,1)] lg:hidden ${
-          mobileOpen ? "translate-x-0" : "translate-x-full"
-        }`}
+        className={`fixed top-0 right-0 h-full w-[88vw] max-w-sm bg-white z-50 shadow-2xl flex flex-col transition-transform duration-300 ease-[cubic-bezier(0.32,0.72,0,1)] lg:hidden ${mobileOpen ? "translate-x-0" : "translate-x-full"
+          }`}
       >
         {/* Drawer Header */}
         <div className="flex items-center justify-between px-5 py-4 border-b border-gray-100 shrink-0">
@@ -336,7 +359,7 @@ export default function Navbar({
           </button>
         </div>
 
-        {/* Drawer Body — scrollable */}
+        {/* Drawer Body */}
         <div className="flex-1 overflow-y-auto overscroll-contain px-3 py-3 space-y-0.5">
           {categories.map((cat) => {
             const Icon = cat.icon;
@@ -353,11 +376,10 @@ export default function Navbar({
                       handleCategory(cat.key);
                     }
                   }}
-                  className={`w-full flex items-center gap-3 px-4 py-3 text-sm font-semibold rounded-xl transition-all duration-150 ${
-                    isActive
-                      ? "bg-orange-50 text-orange-600"
-                      : "text-gray-700 hover:bg-gray-50"
-                  }`}
+                  className={`w-full flex items-center gap-3 px-4 py-3 text-sm font-semibold rounded-xl transition-all duration-150 ${isActive
+                    ? "bg-orange-50 text-orange-600"
+                    : "text-gray-700 hover:bg-gray-50"
+                    }`}
                 >
                   <span
                     className="flex items-center justify-center w-8 h-8 rounded-lg shrink-0"
@@ -369,34 +391,39 @@ export default function Navbar({
                   {cat.sub.length > 0 && (
                     <ChevronDown
                       size={15}
-                      className={`text-gray-400 transition-transform duration-200 ${
-                        isExpanded ? "rotate-180" : ""
-                      }`}
+                      className={`text-gray-400 transition-transform duration-200 ${isExpanded ? "rotate-180" : ""
+                        }`}
                     />
                   )}
                 </button>
 
-                {/* Subcategories — smooth height animation */}
+                {/* Subcategories */}
                 {cat.sub.length > 0 && (
                   <div
-                    className={`overflow-hidden transition-all duration-300 ease-in-out ${
-                      isExpanded ? "max-h-[800px] opacity-100" : "max-h-0 opacity-0"
-                    }`}
+                    className={`overflow-hidden transition-all duration-300 ease-in-out ${isExpanded ? "max-h-[800px] opacity-100" : "max-h-0 opacity-0"
+                      }`}
                   >
                     <div className="pl-4 pr-2 pb-2 space-y-0.5">
-                      {cat.sub.map((s) => (
-                        <button
-                          key={s}
-                          onClick={() => handleCategory(cat.key, s)}
-                          className="w-full flex items-center gap-2 px-3 py-2 text-sm text-gray-500 hover:text-gray-900 hover:bg-gray-50 rounded-lg transition-colors duration-100 group/sub"
-                        >
-                          <span
-                            className="w-1.5 h-1.5 rounded-full shrink-0 transition-transform group-hover/sub:scale-150"
-                            style={{ background: cat.color }}
-                          />
-                          {formatLabel(s)}
-                        </button>
-                      ))}
+                      {cat.sub.map((s) => {
+                        const isActiveSub = activeSubcategory === s && isActive;
+                        return (
+                          <button
+                            key={s}
+                            onClick={() => handleCategory(cat.key, s)}
+                            className={`w-full flex items-center gap-2 px-3 py-2 text-sm rounded-lg transition-colors duration-100 group/sub ${isActiveSub
+                              ? "bg-orange-50 text-orange-600 font-semibold"
+                              : "text-gray-500 hover:text-gray-900 hover:bg-gray-50"
+                              }`}
+                          >
+                            <span
+                              className={`w-1.5 h-1.5 rounded-full shrink-0 transition-transform group-hover/sub:scale-150 ${isActiveSub ? "scale-150" : ""
+                                }`}
+                              style={{ background: cat.color }}
+                            />
+                            {formatLabel(s)}
+                          </button>
+                        );
+                      })}
                     </div>
                   </div>
                 )}
@@ -416,6 +443,7 @@ export default function Navbar({
                 <LogIn size={15} />
                 Login
               </a>
+
               <a
                 href="/register"
                 className="flex items-center justify-center gap-2 w-full py-2.5 text-sm font-semibold text-white bg-orange-500 hover:bg-orange-600 rounded-xl transition-colors duration-150"
@@ -436,10 +464,10 @@ export default function Navbar({
             </div>
           )}
         </div>
-      </div>
+      </div >
 
-      {/* Spacer so page content clears the fixed navbar */}
-      <div className="h-16" />
+      {/* Spacer */}
+      < div className="h-16" />
     </>
   );
 }

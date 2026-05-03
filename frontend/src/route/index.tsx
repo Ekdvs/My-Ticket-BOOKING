@@ -39,6 +39,7 @@ import PaymentPage from "../pages/pages/payment";
 import SuccessPage from "../pages/pages/SuccessPage";
 import CancelPage from "../pages/pages/Cancelpage";
 import NotFound from "../pages/pages/NotFound";
+import EventsPage from "../pages/EventsPage";
 
 
 
@@ -90,7 +91,8 @@ const router = createBrowserRouter([
      {path:"/payment/:bookingId", element: <PaymentPage />},
      {path:"/success", element: <SuccessPage />},
      {path:"/cancel", element: <CancelPage />},
-     {path:"*", element: <NotFound/>}
+     {path:"*", element: <NotFound/>},
+     {path:"/events" , element: <EventsPage />}
       
     ],
   },
