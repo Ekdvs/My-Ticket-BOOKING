@@ -55,7 +55,7 @@ export default function PaymentPage() {
           method: SummaryApi.createPayment.method,
           url: `${SummaryApi.createPayment.url}?bookingId=${bookingId}`,
         });
-        console.log("Payment data received:", res.data);
+        
         setPaymentData(res.data);
       } catch (err: any) {
         toast.error("Failed to prepare payment. Please try again.");
