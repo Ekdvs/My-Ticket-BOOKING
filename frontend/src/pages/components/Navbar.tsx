@@ -5,7 +5,7 @@ import {
   Search,
   X,
   Film,
-  Drama,
+
   Trophy,
   Palmtree,
   UtensilsCrossed,
