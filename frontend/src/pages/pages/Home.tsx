@@ -11,6 +11,7 @@ import { X, SlidersHorizontal } from "lucide-react";
 import EventCard from "../components/Eventcard";
 import EventSection from "../components/Eventsection";
 import type { AppEvent } from "../../type/type";
+import AdBanner from "../components/AdBanner";
 
 const SECTIONS = [
   { cat: "EVENT",   label: "Events",   emoji: "🎵", color: "#f97316" },
@@ -184,6 +185,7 @@ const HomePage = () => {
             </div>
 
             {loading ? (
+              
               <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3.5">
                 {[...Array(10)].map((_, i) => <div key={i} className="h-72 rounded-2xl bg-gray-100 animate-pulse" />)}
               </div>
@@ -195,6 +197,7 @@ const HomePage = () => {
               </div>
             ) : (
               <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3.5">
+                <AdBanner />
                 {filtered.map((e, i) => (
                   <div key={e.id} style={{ animation: "cardFadeIn 0.35s ease-out both", animationDelay: `${Math.min(i * 30, 300)}ms` }}>
                     <EventCard event={e} onClick={() => handleEventClick(e)} />
@@ -243,6 +246,7 @@ const HomePage = () => {
         @keyframes fadeSlideDown { from { opacity:0; transform:translateY(-6px); } to { opacity:1; transform:translateY(0); } }
       `}</style>
     </div>
+    <AdBanner />
     </>
   );
 };

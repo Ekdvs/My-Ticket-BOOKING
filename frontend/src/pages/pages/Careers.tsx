@@ -2,6 +2,7 @@ import { ArrowRight, Briefcase, MapPin } from "lucide-react";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import { Link } from "react-router-dom";
+import AdBanner from "../components/AdBanner";
 
 type Dept =
   | "Engineering"
@@ -107,7 +108,7 @@ export function Careers() {
                 </div>
               ))}
             </div>
-          </div>
+          </div><AdBanner />
 
           {/* CTA */}
           <div className="bg-gradient-to-r from-orange-500/10 to-red-500/10 border border-orange-500/20 rounded-2xl p-8 text-center">

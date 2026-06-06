@@ -5,6 +5,7 @@ import { FaWhatsapp, FaFacebook, FaInstagram } from "react-icons/fa";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import { Link } from "react-router-dom";
+import AdBanner from "../components/AdBanner";
 
 // ─── TYPES ────────────────────────────────────────────────────────────────
 type FormState = {
@@ -461,6 +462,7 @@ export default function Contact() {
             </div>
           </div>
         </div>
+        <AdBanner />
 
         {/* ── OFFICE STRIP ──────────────────────────────────────────────────────── */}
         <div className="border-t border-white/5">

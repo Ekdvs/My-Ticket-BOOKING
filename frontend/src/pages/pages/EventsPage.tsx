@@ -21,6 +21,7 @@ import SummaryApi from "../../api/SummaryApi";
 import Navbar from "../components/Navbar";
 import EventCard from "../components/Eventcard";
 import Footer from "../components/Footer";
+import AdBanner from "../components/AdBanner";
 
 
 /* ─── Constants ─── */
@@ -613,7 +614,7 @@ const EventsPage = () => {
           }>
             {[...Array(PAGE_SIZE)].map((_, i) => <SkeletonCard key={i} />)}
           </div>
-        )}
+        )}<AdBanner />
 
         {/* ── Error state ── */}
         {!loading && error && (
@@ -675,7 +676,7 @@ const EventsPage = () => {
                   />
                 </div>
               ))}
-            </div>
+            </div><AdBanner />
 
             {/* ── Load more button ── */}
             {page < totalPages - 1 && (
@@ -711,7 +712,7 @@ const EventsPage = () => {
               </div>
             )}
           </>
-        )}
+        )}<AdBanner />
       </main>
 
       <Footer />

@@ -2,6 +2,7 @@
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import { ChevronRight } from 'lucide-react';
+import AdBanner from '../components/AdBanner';
 
 type TagColor = "orange" | "blue" | "purple" | "green" | "red" | "yellow";
 const Blog = () => {
@@ -84,6 +85,8 @@ const tagColors: Record<TagColor, string> = {
           </p>
         </div>
       </div>
+
+      <AdBanner />
 
       <div className="max-w-5xl mx-auto px-6 py-16">
         <div className="grid md:grid-cols-2 gap-6">
