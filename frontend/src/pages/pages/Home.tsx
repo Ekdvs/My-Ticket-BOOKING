@@ -2,7 +2,7 @@ import { useEffect, useState, useCallback } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import Axios from "../../utils/Axios";
 import SummaryApi from "../../api/SummaryApi";
-
+import { Helmet } from "react-helmet-async";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import Hero from "../components/Hero";
@@ -124,6 +124,17 @@ const HomePage = () => {
   };
 
   return (
+    <>
+     <Helmet>
+        <title>Book Event Tickets Online | Fast & Secure</title>
+        <meta name="description" content="Book concert, movie, and event tickets online with secure payment and QR tickets." />
+        <meta name="keywords" content="ticket booking, events, concert tickets, movie tickets, online booking" />
+
+        {/* Open Graph (for WhatsApp, Facebook) */}
+        <meta property="og:title" content="Ticket Booking System" />
+        <meta property="og:description" content="Book tickets easily with QR confirmation." />
+        <meta property="og:type" content="website" />
+      </Helmet>
     <div className="min-h-screen bg-[#f8f8fa]">
       <Navbar
         activeCategory={activeCategory}
@@ -237,6 +248,7 @@ const HomePage = () => {
         @keyframes fadeSlideDown { from { opacity:0; transform:translateY(-6px); } to { opacity:1; transform:translateY(0); } }
       `}</style>
     </div>
+    </>
   );
 };
 
