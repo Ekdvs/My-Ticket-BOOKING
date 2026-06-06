@@ -126,15 +126,10 @@ const HomePage = () => {
   return (
     <>
      <Helmet>
-        <title>Book Event Tickets Online | Fast & Secure</title>
-        <meta name="description" content="Book concert, movie, and event tickets online with secure payment and QR tickets." />
-        <meta name="keywords" content="ticket booking, events, concert tickets, movie tickets, online booking" />
-
-        {/* Open Graph (for WhatsApp, Facebook) */}
-        <meta property="og:title" content="Ticket Booking System" />
-        <meta property="og:description" content="Book tickets easily with QR confirmation." />
-        <meta property="og:type" content="website" />
-      </Helmet>
+  <title>MyTickets — Book Events, Concerts & Movies in Sri Lanka</title>
+  <meta name="description" content="Discover and book tickets for concerts, movies, sports and holiday events across Sri Lanka. Instant QR tickets, secure payments." />
+  <link rel="canonical" href="https://project-qt6jb.vercel.app/" />
+</Helmet>
     <div className="min-h-screen bg-[#f8f8fa]">
       <Navbar
         activeCategory={activeCategory}

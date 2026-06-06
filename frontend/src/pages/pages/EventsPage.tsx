@@ -1,7 +1,7 @@
 import { useEffect, useState, useCallback, useRef } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 
-
+import { Helmet } from 'react-helmet-async';
 import {
   X,
   SlidersHorizontal,
@@ -94,6 +94,12 @@ const FilterPanel = ({ filters, onChange, onApply, onReset, resultCount, loading
     filters.search;
 
   return (
+    <>
+    <Helmet>
+  <title>Browse All Events in Sri Lanka | MyTickets</title>
+  <meta name="description" content="Browse concerts, movies, sports events, food festivals and holiday packages across Sri Lanka. Filter by category and book instantly." />
+  <link rel="canonical" href="https://project-qt6jb.vercel.app/events" />
+</Helmet>
     <div
       ref={panelRef}
       className="sticky top-[68px] z-30 bg-white/95 backdrop-blur-md border-b border-gray-100 shadow-sm"
@@ -260,6 +266,7 @@ const FilterPanel = ({ filters, onChange, onApply, onReset, resultCount, loading
         </div>
       </div>
     </div>
+    </>
   );
 };
 
@@ -444,6 +451,11 @@ const EventsPage = () => {
 
   /* ── Render ── */
   return (
+    <><Helmet>
+  <title>Browse All Events in Sri Lanka | MyTickets</title>
+  <meta name="description" content="Browse concerts, movies, sports events, food festivals and holiday packages across Sri Lanka. Filter by category and book instantly." />
+  <link rel="canonical" href="https://project-qt6jb.vercel.app/events" />
+</Helmet>
     <div className="min-h-screen bg-[#f8f8fa]">
       <Navbar />
 
@@ -713,6 +725,7 @@ const EventsPage = () => {
         .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
       `}</style>
     </div>
+    </>
   );
 };
 

@@ -17,6 +17,7 @@ import {
   FiClock,
   FiShoppingCart,
 } from "react-icons/fi";
+import { Helmet } from 'react-helmet-async';
 
 export default function EventDetailsPage() {
   const { id } = useParams();
@@ -68,6 +69,13 @@ export default function EventDetailsPage() {
   if (!event) {
     return (
       <>
+      <Helmet>
+  <title>{event.name} — Book Tickets | MyTickets</title>
+  <meta name="description" content={`Book tickets for ${event.name} on ${event.date} at ${event.location}. ${event.description?.slice(0, 100)}...`} />
+  <link rel="canonical" href={`https://project-qt6jb.vercel.app/event/${event.id}`} />
+  <meta property="og:title" content={event.name} />
+  <meta property="og:image" content={event.images?.[0]} />
+</Helmet>
         <Navbar />
         <div className="min-h-screen bg-gray-50 flex items-center justify-center">
           <div className="text-center space-y-3">
