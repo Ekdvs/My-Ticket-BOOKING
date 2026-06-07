@@ -71,7 +71,7 @@ const UserNotificationBell = () => {
       </button>
 
       {open && (
-        <div className="absolute right-0  mt-2 w-80 bg-white shadow-xl rounded-xl border z-50 max-h-96 overflow-y-auto">
+        <div className="fixed right-4 top-16 w-80 bg-white shadow-xl rounded-xl border z-50 max-h-[70vh] overflow-y-auto">
           <div className="p-3 border-b font-semibold flex justify-between">
             <span>Notifications</span>
             <button onClick={fetchNotifications} className="text-xs text-indigo-500">Refresh</button>
