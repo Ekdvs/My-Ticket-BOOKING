@@ -146,7 +146,7 @@ const DashboardHome = ({ user, onNavigate }: any) => {
                     <td className="px-5 py-3 text-right text-slate-600">{row.totalTickets}</td>
                     <td className="px-5 py-3 text-right text-slate-600">{row.usedTickets}</td>
                     <td className="px-5 py-3 text-right font-bold text-emerald-600">
-                      ${Number(row.revenue ?? 0).toLocaleString("en", { minimumFractionDigits: 2 })}
+                      LKR {Number(row.revenue ?? 0).toLocaleString("en", { minimumFractionDigits: 2 })}
                     </td>
                   </tr>
                 ))}
