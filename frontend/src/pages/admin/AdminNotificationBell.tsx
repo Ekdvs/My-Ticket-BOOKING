@@ -105,7 +105,7 @@ const AdminNotificationBell = () => {
 
       {/* Dropdown */}
       {open && (
-        <div className="absolute right-0 mt-2 w-80 bg-white shadow-xl rounded-xl border z-50 max-h-96 overflow-y-auto">
+        <div className="absolute right-0 mr-2 mt-2 w-80 bg-white shadow-xl rounded-xl border z-50 max-h-96 overflow-y-auto">
 
           <div className="p-3 border-b font-semibold flex justify-between">
             <span>Notifications</span>
